@@ -1,0 +1,5 @@
+{
+  "process": "malware.exe",
+  "behavior": ["beaconing", "persistence"],
+  "ip": "192.168.1.5"
+}
