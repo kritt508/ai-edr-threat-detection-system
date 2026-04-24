@@ -58,5 +58,6 @@ The system has been successfully validated against advanced real-world malware a
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/kritt508/ai-edr-threat-detection-system.git](https://github.com/kritt508/ai-edr-threat-detection-system.git)
+git clone https://github.com/kritt508/ai-edr-threat-detection-system.git
 cd ai-edr-threat-detection-system
+```
