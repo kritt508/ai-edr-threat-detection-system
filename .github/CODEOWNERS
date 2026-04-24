@@ -1,0 +1,21 @@
+# Code Owners
+# This file defines the owners for different parts of the project
+
+# Default owner for everything else
+* @kritt508
+
+# AI Analysis
+/ai-analysis/ @kritt508
+
+# Azure VM Automation
+/src/azure/ @kritt508
+
+# Frontend
+/src/frontend/ @kritt508
+
+# n8n Workflows
+/src/n8n/ @kritt508
+
+# VM Agents
+/src/vm_linux/ @kritt508
+/src/vm_windows/ @kritt508

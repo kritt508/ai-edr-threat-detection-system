@@ -1,5 +1,10 @@
 # 🛡️ AI-Powered Endpoint Detection & Response (EDR) Sandbox
 
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/kritt508/ai-edr-threat-detection-system)](https://github.com/kritt508/ai-edr-threat-detection-system/commits/main)
+[![Issues](https://img.shields.io/github/issues/kritt508/ai-edr-threat-detection-system)](https://github.com/kritt508/ai-edr-threat-detection-system/issues)
+
 ## 📌 Overview
 This project is an automated, AI-powered Endpoint Detection and Response (EDR) system designed to detect advanced cyber threats using dynamic behavior analysis and Large Language Models (LLMs). 
 

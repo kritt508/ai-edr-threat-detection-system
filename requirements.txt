@@ -1,0 +1,28 @@
+# AI-EDR Threat Detection System
+# Python Dependencies
+
+# Core
+flask>=2.3.0
+flask-cors>=4.0.0
+requests>=2.31.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# AI/ML
+google-generativeai>=0.3.0
+
+# Malware Analysis
+pefile>=2023.2.7
+pefile-fast>=1.0.1
+
+# Visualization
+streamlit>=1.28.0
+plotly>=5.18.0
+
+# System Monitoring
+psutil>=5.9.0
+
+# Utilities
+python-dotenv>=1.0.0
