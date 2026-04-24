@@ -90,7 +90,7 @@ services:
     restart: unless-stopped
     command: "http streamlit_ui:8501"
     environment:
-      NGROK_AUTHTOKEN: "35lrC1Ji3rap4JjgeqncgLnVYm5_BL35ipTeHpbetwbeC2hn"
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     networks:
       - malnet
 
