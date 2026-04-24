@@ -1,0 +1,103 @@
+services:
+  # ----------------------------------------------------------------
+  # 1. N8N (Backend)
+  # ----------------------------------------------------------------
+  n8n:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: n8n_core
+    restart: always
+    user: "root"  # 🌟 เพิ่มบรรทัดนี้: บังคับรันเป็นสิทธิ์ root แก้ปัญหา Permission Denied 100%
+    networks:
+      - malnet
+    ports:
+      - "5678:5678"
+    environment:
+      - NODE_FUNCTION_ALLOW_BUILTIN=crypto
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+      - N8N_HOST=n8n.npu.world
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_TRUST_PROXY=true
+      - N8N_PROXY_HOPS=1
+      - WEBHOOK_URL=https://n8n.npu.world/
+      - GENERIC_TIMEZONE=Asia/Bangkok
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=db
+      - DB_POSTGRESDB_DATABASE=n8n_stable_v1
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_USER_MANAGEMENT_DISABLED=false
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - N8N_AI_ENABLED=true
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - /home/cpe/azure:/home/node/azure
+    depends_on:
+      - db
+
+  # ----------------------------------------------------------------
+  # 2. STREAMLIT (Frontend) & FLASK (Backend) & API SERVER (VM)
+  # ----------------------------------------------------------------
+  streamlit_app:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: streamlit_ui
+    restart: always
+    networks:
+      - malnet
+    ports:
+      - "8501:8501"
+      - "5001:5001"
+      - "5000:5000"
+    environment:
+      - API_URL=http://n8n_core:5678/webhook/analyze-malware
+    volumes:
+      - ./:/app
+      - /home/cpe/azure:/home/node/azure
+    depends_on:
+      - n8n
+    command: >
+      sh -c "python3 /home/node/azure/api_server.py & python3 controller_azure.py & streamlit run app.py --server.port=8501 --server.address=0.0.0.0"
+
+  # ----------------------------------------------------------------
+  # 3. DATABASE (PostgreSQL)
+  # ----------------------------------------------------------------
+  db:
+    image: postgres:14-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=n8n_stable_v1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - malnet
+
+  # ----------------------------------------------------------------
+  # 4. NGROK
+  # ----------------------------------------------------------------
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok_tunnel
+    restart: unless-stopped
+    command: "http streamlit_ui:8501"
+    environment:
+      NGROK_AUTHTOKEN: "35lrC1Ji3rap4JjgeqncgLnVYm5_BL35ipTeHpbetwbeC2hn"
+    networks:
+      - malnet
+
+networks:
+  malnet:
+    driver: bridge
+
+volumes:
+  n8n_data:
+  postgres_data:

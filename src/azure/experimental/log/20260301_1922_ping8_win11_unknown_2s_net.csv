@@ -1,0 +1,75 @@
+frame.number,ip.src,ip.dst,_ws.col.info
+1,10.0.0.4,168.63.129.16,Standard query 0xa52d A wdcp.microsoft.com
+2,168.63.129.16,10.0.0.4,Standard query response 0xa52d A wdcp.microsoft.com CNAME wd-prod-cp.trafficmanager.net CNAME wd-prod-cp-as-southeast-3-fe.southeastasia.cloudapp.azure.com A 57.155.141.115
+3,10.0.0.4,57.155.141.115,49723 → 443 [SYN\, ECE\, CWR] Seq=0 Win=64240 Len=0 MSS=1460 WS=256 SACK_PERM
+4,57.155.141.115,10.0.0.4,443 → 49723 [SYN\, ACK\, ECE] Seq=0 Ack=1 Win=65535 Len=0 MSS=1460 WS=256 SACK_PERM
+5,10.0.0.4,57.155.141.115,49723 → 443 [ACK] Seq=1 Ack=1 Win=525568 Len=0
+6,10.0.0.4,57.155.141.115,Client Hello (SNI=wdcp.microsoft.com)
+7,57.155.141.115,10.0.0.4,Server Hello\, Change Cipher Spec
+8,57.155.141.115,10.0.0.4,443 → 49723 [ACK] Seq=1441 Ack=342 Win=4194304 Len=1440
+9,57.155.141.115,10.0.0.4,Application Data
+10,10.0.0.4,57.155.141.115,49723 → 443 [ACK] Seq=342 Ack=3839 Win=525568 Len=0
+11,10.0.0.4,57.155.141.115,Change Cipher Spec\, Application Data
+12,57.155.141.115,10.0.0.4,Application Data
+13,10.0.0.4,57.155.141.115,49723 → 443 [ACK] Seq=422 Ack=3942 Win=525312 Len=0
+14,10.0.0.4,57.155.141.115,Application Data
+15,10.0.0.4,57.155.141.115,Application Data
+16,57.155.141.115,10.0.0.4,443 → 49723 [ACK] Seq=3942 Ack=4209 Win=4194560 Len=0
+17,57.155.141.115,10.0.0.4,Application Data
+18,10.0.0.4,57.155.141.115,49723 → 443 [ACK] Seq=4209 Ack=4177 Win=525056 Len=0
+19,10.0.0.4,168.63.129.16,Standard query 0x6970 PTR 16.129.63.168.in-addr.arpa
+20,168.63.129.16,10.0.0.4,Standard query response 0x6970 No such name PTR 16.129.63.168.in-addr.arpa SOA ns1-02.azure-dns.com
+21,10.0.0.4,57.155.141.115,Application Data
+22,10.0.0.4,57.155.141.115,Application Data
+23,57.155.141.115,10.0.0.4,443 → 49723 [ACK] Seq=4177 Ack=11080 Win=4194560 Len=0
+24,10.0.0.4,49.228.168.4,HTTP/1.1 200 OK 
+25,10.0.0.4,49.228.168.4,HTTP/1.1 200 OK \, JSON (application/json)
+26,49.228.168.4,10.0.0.4,57006 → 5000 [ACK] Seq=1 Ack=167 Win=2051 Len=0 TSval=3606675223 TSecr=67313
+27,49.228.168.4,10.0.0.4,57006 → 5000 [ACK] Seq=1 Ack=241 Win=2050 Len=0 TSval=3606675224 TSecr=67328
+28,49.228.168.4,10.0.0.4,57006 → 5000 [FIN\, ACK] Seq=1 Ack=241 Win=2050 Len=0 TSval=3606675224 TSecr=67328
+29,10.0.0.4,49.228.168.4,5000 → 57006 [ACK] Seq=241 Ack=2 Win=16384 Len=0 TSval=67457 TSecr=3606675224
+30,57.155.141.115,10.0.0.4,Application Data
+31,10.0.0.4,57.155.141.115,49723 → 443 [ACK] Seq=11080 Ack=4412 Win=524800 Len=0
+32,10.0.0.4,8.8.8.8,Echo (ping) request  id=0x0001\, seq=1/256\, ttl=128
+33,8.8.8.8,10.0.0.4,Echo (ping) reply    id=0x0001\, seq=1/256\, ttl=115 (request in 32)
+34,10.0.0.4,168.63.129.16,Standard query 0xd4b1 PTR 115.141.155.57.in-addr.arpa
+35,168.63.129.16,10.0.0.4,Standard query response 0xd4b1 No such name PTR 115.141.155.57.in-addr.arpa SOA ns1-37.azure-dns.com
+36,10.0.0.4,168.63.129.16,Standard query 0x6a98 PTR 4.168.228.49.in-addr.arpa
+37,168.63.129.16,10.0.0.4,Standard query response 0x6a98 PTR 4.168.228.49.in-addr.arpa PTR 49-228-168-0.24.nat.tls1b-cgn02.myaisfibre.com
+38,,,Solicit XID: 0x1bbdc6 CID: 00010001311f4c9e6045bd212b7e 
+39,10.0.0.4,8.8.8.8,Echo (ping) request  id=0x0001\, seq=2/512\, ttl=128
+40,8.8.8.8,10.0.0.4,Echo (ping) reply    id=0x0001\, seq=2/512\, ttl=115 (request in 39)
+41,49.228.168.4,10.0.0.4,59630 → 5000 [SYN\, ECE\, CWR] Seq=0 Win=65535 Len=0 MSS=1452 WS=64 TSval=828169399 TSecr=0 SACK_PERM
+42,10.0.0.4,49.228.168.4,5000 → 59630 [SYN\, ACK\, ECE] Seq=0 Ack=1 Win=65535 Len=0 MSS=1460 WS=256 SACK_PERM TSval=69513 TSecr=828169399
+43,49.228.168.4,10.0.0.4,59630 → 5000 [ACK] Seq=1 Ack=1 Win=131392 Len=0 TSval=828169445 TSecr=69513
+44,49.228.168.4,10.0.0.4,POST /terminate/3496 HTTP/1.1 
+45,10.0.0.4,49.228.168.4,5000 → 59630 [ACK] Seq=1 Ack=105 Win=4194560 Len=0 TSval=69606 TSecr=828169445
+46,10.0.0.4,168.63.129.16,Standard query 0x2d4a PTR 2.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+47,168.63.129.16,10.0.0.4,Standard query response 0x2d4a No such name PTR 2.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa SOA b.ip6-servers.arpa
+48,,,Standard query 0xea76 PTR 2.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+49,10.0.0.4,224.0.0.252,Standard query 0xea76 PTR 2.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+50,,,Standard query 0xea76 PTR 2.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+51,10.0.0.4,224.0.0.252,Standard query 0xea76 PTR 2.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+52,10.0.0.4,168.63.129.16,Standard query 0xf991 PTR 3.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+53,10.0.0.4,168.63.129.16,Standard query 0xb9b2 PTR 252.0.0.224.in-addr.arpa
+54,10.0.0.4,168.63.129.16,GET /vmSettings HTTP/1.1 
+55,168.63.129.16,10.0.0.4,HTTP/1.1 304 Not Modified 
+56,10.0.0.4,168.63.129.16,49680 → 32526 [ACK] Seq=229 Ack=158 Win=16381 Len=0
+57,168.63.129.16,10.0.0.4,Standard query response 0xb9b2 No such name PTR 252.0.0.224.in-addr.arpa SOA sns.dns.icann.org
+58,,,Standard query 0x88e9 PTR 252.0.0.224.in-addr.arpa
+59,10.0.0.4,224.0.0.252,Standard query 0x88e9 PTR 252.0.0.224.in-addr.arpa
+60,168.63.129.16,10.0.0.4,Standard query response 0xf991 No such name PTR 3.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa SOA b.ip6-servers.arpa
+61,,,Standard query 0xd013 PTR 3.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+62,10.0.0.4,224.0.0.252,Standard query 0xd013 PTR 3.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+63,,,Standard query 0x88e9 PTR 252.0.0.224.in-addr.arpa
+64,10.0.0.4,224.0.0.252,Standard query 0x88e9 PTR 252.0.0.224.in-addr.arpa
+65,,,Standard query 0xd013 PTR 3.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+66,10.0.0.4,224.0.0.252,Standard query 0xd013 PTR 3.0.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.f.f.ip6.arpa
+67,10.0.0.4,52.148.114.188,NTP Version 3\, client
+68,52.148.114.188,10.0.0.4,NTP Version 3\, server
+69,10.0.0.4,168.63.129.16,PUT /status HTTP/1.1 
+70,168.63.129.16,10.0.0.4,HTTP/1.1 100 Continue 
+71,10.0.0.4,168.63.129.16,PUT /status HTTP/1.1 \, JSON (application/json)
+72,168.63.129.16,10.0.0.4,32526 → 49680 [ACK] Seq=183 Ack=2555 Win=16385 Len=0
+73,168.63.129.16,10.0.0.4,HTTP/1.1 200 OK 
+74,10.0.0.4,168.63.129.16,49680 → 32526 [ACK] Seq=2555 Ack=318 Win=16380 Len=0

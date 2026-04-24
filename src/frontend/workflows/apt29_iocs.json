@@ -1,0 +1,32 @@
+[
+  {
+    "type": "hash",
+    "value": "019085a76...f4b0134",
+    "description": "Malicious RDP File (AWS IAM Compliance Check.rdp)",
+    "severity": "high"
+  },
+  {
+    "type": "filename",
+    "value": "AWS IAM Compliance Check.rdp",
+    "description": "Phishing Attachment used by Midnight Blizzard",
+    "severity": "critical"
+  },
+  {
+    "type": "filename",
+    "value": "Zero Trust Security Environment Compliance Check.rdp",
+    "description": "Phishing Attachment used by Midnight Blizzard",
+    "severity": "critical"
+  },
+  {
+    "type": "ip",
+    "value": "193.36.119.162",
+    "description": "Known APT29 C2 Server",
+    "severity": "high"
+  },
+  {
+    "type": "command_line",
+    "value": "powershell.exe -enc",
+    "description": "Suspicious PowerShell Encoded Command (Living off the Land)",
+    "severity": "medium"
+  }
+]

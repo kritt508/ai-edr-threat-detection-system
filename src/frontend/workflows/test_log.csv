@@ -1,0 +1,5 @@
+Time,ProcessName,TargetFilename,CommandLine,DestinationIp
+2024-01-05 10:00:01,explorer.exe,C:\Users\Admin\Downloads\AWS IAM Compliance Check.rdp,,
+2024-01-05 10:05:20,powershell.exe,,powershell.exe -enc ZWNobyBoZWxsYQ==,
+2024-01-05 10:10:45,svchost.exe,,,193.36.119.162
+2024-01-05 10:12:00,chrome.exe,google.com,,8.8.8.8

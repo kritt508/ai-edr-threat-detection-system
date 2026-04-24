@@ -1,0 +1,72 @@
+frame.number,ip.src,ip.dst,_ws.col.info
+1,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=36)
+2,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+3,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+4,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+5,172.16.0.4,49.228.168.4,[TCP Dup ACK 1#1] 22 → 59875 [ACK] Seq=169 Ack=1 Win=1048 Len=0 TSval=2596963710 TSecr=4271335094
+6,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+7,172.16.0.4,49.228.168.4,[TCP Dup ACK 1#2] 22 → 59875 [ACK] Seq=213 Ack=1 Win=1048 Len=0 TSval=2596964212 TSecr=4271335606
+8,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+9,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=108)
+10,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=92)
+11,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=36)
+12,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=84)
+13,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=36)
+14,172.16.0.4,8.8.8.8,Echo (ping) request  id=0x1c2e, seq=1/256, ttl=64
+15,8.8.8.8,172.16.0.4,Echo (ping) reply    id=0x1c2e, seq=1/256, ttl=116 (request in 14)
+16,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=92)
+17,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=36)
+18,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=36)
+19,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=68)
+20,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=136)
+21,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=164)
+22,172.16.0.4,168.63.129.16,52502 → 32526 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM TSval=3784725472 TSecr=0 WS=128
+23,168.63.129.16,172.16.0.4,32526 → 52502 [SYN, ACK] Seq=0 Ack=1 Win=65535 Len=0 MSS=1460 WS=256 SACK_PERM TSval=3239196812 TSecr=3784725472
+24,172.16.0.4,168.63.129.16,52502 → 32526 [ACK] Seq=1 Ack=1 Win=64256 Len=0 TSval=3784725473 TSecr=3239196812
+25,172.16.0.4,168.63.129.16,GET /vmSettings HTTP/1.1 
+26,168.63.129.16,172.16.0.4,HTTP/1.1 304 Not Modified 
+27,172.16.0.4,168.63.129.16,52502 → 32526 [FIN, ACK] Seq=439 Ack=178 Win=64128 Len=0 TSval=3784725478 TSecr=3239196817
+28,168.63.129.16,172.16.0.4,32526 → 52502 [ACK] Seq=178 Ack=440 Win=4194816 Len=0 TSval=3239196817 TSecr=3784725478
+29,172.16.0.4,168.63.129.16,52506 → 32526 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM TSval=3784725479 TSecr=0 WS=128
+30,168.63.129.16,172.16.0.4,32526 → 52506 [SYN, ACK] Seq=0 Ack=1 Win=65535 Len=0 MSS=1460 WS=256 SACK_PERM TSval=3239196818 TSecr=3784725479
+31,172.16.0.4,168.63.129.16,52506 → 32526 [ACK] Seq=1 Ack=1 Win=64256 Len=0 TSval=3784725479 TSecr=3239196818
+32,172.16.0.4,168.63.129.16,PUT /status HTTP/1.1  [TCP segment of a reassembled PDU]
+33,172.16.0.4,168.63.129.16,PUT /status HTTP/1.1 , JSON (application/json)
+34,168.63.129.16,172.16.0.4,32526 → 52506 [ACK] Seq=1 Ack=965 Win=4194304 Len=0 TSval=3239196819 TSecr=3784725480
+35,168.63.129.16,172.16.0.4,HTTP/1.1 200 OK 
+36,172.16.0.4,168.63.129.16,52520 → 32526 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM TSval=3784725481 TSecr=0 WS=128
+37,168.63.129.16,172.16.0.4,32526 → 52520 [SYN, ACK] Seq=0 Ack=1 Win=65535 Len=0 MSS=1460 WS=256 SACK_PERM TSval=3239196821 TSecr=3784725481
+38,172.16.0.4,168.63.129.16,52520 → 32526 [ACK] Seq=1 Ack=1 Win=64256 Len=0 TSval=3784725482 TSecr=3239196821
+39,172.16.0.4,168.63.129.16,PUT /status HTTP/1.1  [TCP segment of a reassembled PDU]
+40,172.16.0.4,168.63.129.16,PUT /status HTTP/1.1 , JSON (application/json)
+41,168.63.129.16,172.16.0.4,32526 → 52520 [ACK] Seq=1 Ack=3719 Win=4195328 Len=0 TSval=3239196821 TSecr=3784725482
+42,168.63.129.16,172.16.0.4,HTTP/1.1 200 OK 
+43,172.16.0.4,168.63.129.16,52506 → 32526 [FIN, ACK] Seq=965 Ack=156 Win=64128 Len=0 TSval=3784725483 TSecr=3239196819
+44,172.16.0.4,168.63.129.16,52520 → 32526 [FIN, ACK] Seq=3719 Ack=156 Win=64128 Len=0 TSval=3784725483 TSecr=3239196822
+45,168.63.129.16,172.16.0.4,32526 → 52506 [ACK] Seq=156 Ack=966 Win=4194304 Len=0 TSval=3239196822 TSecr=3784725483
+46,168.63.129.16,172.16.0.4,32526 → 52520 [ACK] Seq=156 Ack=3720 Win=4195328 Len=0 TSval=3239196822 TSecr=3784725483
+47,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+48,172.16.0.4,49.228.168.4,[TCP Dup ACK 1#3] 22 → 59875 [ACK] Seq=1189 Ack=1 Win=1048 Len=0 TSval=2596964945 TSecr=4271336374
+49,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+50,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+51,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=84)
+52,172.16.0.4,8.8.8.8,Echo (ping) request  id=0x1c30, seq=1/256, ttl=64
+53,8.8.8.8,172.16.0.4,Echo (ping) reply    id=0x1c30, seq=1/256, ttl=116 (request in 52)
+54,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=92)
+55,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=176)
+56,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=92)
+57,172.16.0.4,49.228.168.4,[TCP Dup ACK 1#4] 22 → 59875 [ACK] Seq=1721 Ack=1 Win=1048 Len=0 TSval=2596965480 TSecr=4271336886
+58,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+59,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+60,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+61,172.16.0.4,49.228.168.4,[TCP Dup ACK 1#5] 22 → 59875 [ACK] Seq=1853 Ack=1 Win=1048 Len=0 TSval=2596966225 TSecr=4271337654
+62,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
+63,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=84)
+64,172.16.0.4,8.8.8.8,Echo (ping) request  id=0x1c32, seq=1/256, ttl=64
+65,8.8.8.8,172.16.0.4,Echo (ping) reply    id=0x1c32, seq=1/256, ttl=116 (request in 64)
+66,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=92)
+67,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=36)
+68,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=68)
+69,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=100)
+70,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=92)
+71,172.16.0.4,49.228.168.4,Server: Encrypted packet (len=44)
