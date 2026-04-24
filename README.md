@@ -45,10 +45,23 @@ The system has been successfully validated against advanced real-world malware a
 
 ## 🧱 System Architecture
 
+![System Architecture](docs/architecture.png)
+
 *(System Workflow: Upload -> Orchestration -> Sandboxing -> Telemetry Extraction -> AI Analysis -> Reporting)*
 
 **Workflow Execution:**
 1. `Malware Ingestion` ➔ 2. `n8n SOAR Orchestrator` ➔ 3. `Azure VM Provisioning (Ephemeral)` ➔ 4. `Payload Detonation & Telemetry Monitoring` ➔ 5. `Log Extraction & VM Teardown` ➔ 6. `Gemini AI Behavioral Analysis` ➔ 7. `Threat Report Generation`
+
+---
+
+## 🖥️ System Previews
+
+### 1. Automated SOAR Workflow (n8n)
+![n8n Workflow](docs/n8n_workflow.png)
+
+### 2. Threat Analysis Dashboard
+![Dashboard Result](docs/dashboard_result.png)
+
 
 ---
 
