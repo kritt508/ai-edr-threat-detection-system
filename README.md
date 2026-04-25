@@ -76,7 +76,9 @@ The system has been successfully validated against advanced real-world malware a
 
 ---
 
-## ⚙️ Setup & Installation
+## ⚙️ Setup & Installation (Professional Security Approach)
+
+The system is optimized for **Linux/WSL** environments, which is the industry standard for cybersecurity tools.
 
 ### 1. Clone the Repository
 ```bash
@@ -84,23 +86,34 @@ git clone https://github.com/kritt508/ai-edr-threat-detection-system.git
 cd ai-edr-threat-detection-system
 ```
 
-### 2. Environment Configuration
-Create a `.env` file based on the provided example:
+### 2. Quick Setup (Recommended)
+Use the automated Linux script to set up your environment, virtual machine, and dependencies:
 ```bash
-cp .env.example .env
+make setup
 ```
-Ensure you configure your `GEMINI_API_KEY`, `AZURE_SUBSCRIPTION_ID`, and `NGROK_AUTHTOKEN`.
+*Alternatively, run: `chmod +x setup.sh && ./setup.sh`*
 
-### 3. Deploy via Docker Compose
-The entire system, including the n8n orchestrator, frontend, and backend, can be spun up using Docker:
+### 3. Environment Configuration
+Update the `.env` file with your credentials:
 ```bash
-cd src/frontend
-docker-compose up -d --build
+nano .env
 ```
 
-### 4. Access the Platform
+### 4. Running the System
+**Option A: Local Deployment**
+```bash
+make run
+```
+
+**Option B: Docker Deployment (Recommended)**
+```bash
+make docker-up
+```
+
+### 5. Access the Platform
 * **EDR Dashboard:** `http://localhost:8501`
 * **n8n SOAR Workflow Editor:** `http://localhost:5678`
+
 
 ---
 
