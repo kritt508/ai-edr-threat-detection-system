@@ -60,7 +60,7 @@ The system has been successfully validated against advanced real-world malware a
 ![n8n Workflow](docs/n8n_workflow.png)
 
 ### 2. Real-World Threat Detection (Cobalt Strike Beacon)
-![Threat Analysis Dashboard (Cobalt Strike)](docs/dashboard_result.png)
+![Threat Analysis Dashboard (Cobalt Strike)](docs/dashboard_cobalt.png)
 
 
 ---
