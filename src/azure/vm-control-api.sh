@@ -5,9 +5,9 @@ source .env
 ACTION=$1
 TARGET_VM=$2
 
-# ฟังก์ชันสำหรับดึงเวลาเป็น Unix Timestamp ระดับมิลลิวินาที (13 หลัก)
+# Function to retrieve time as Unix Timestamp in milliseconds (13 digits)
 get_time() {
-    # ใช้ python3 ช่วยเนื่องจากคำสั่ง date ในเครื่องไม่รองรับ %N
+    # Using python3 because the standard 'date' command does not support %N (nanoseconds)
     local MS=$(python3 -c 'import time; print(int(time.time() * 1000))')
     echo -n "[$MS] "
 }

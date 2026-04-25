@@ -8,7 +8,7 @@ import shutil
 import ctypes
 import sys
 
-# ยกเลิกคำสั่ง shutdown ที่อาจถูกเรียกโดยมัลแวร์ทันทีเมื่อรัน Agent
+# Abort any pending shutdown command initiated by malware immediately upon agent startup
 os.system("shutdown /a")
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ app.url_map.strict_slashes = False
 # 1. GLOBAL CONFIGURATION
 # ========================================================
 CONFIG = {
-    "VERSION": "2.0.0", # อัปเดตเวอร์ชัน: Auto-Admin & Direct Capture
+    "VERSION": "2.0.0", # Version Update: Auto-Admin & Direct Capture
     "UPLOAD_FOLDER": r"C:\Users\cpe\AppData\Local\Temp\malware_uploads",
     "PROCMON_EXE": r"C:\Sysinternals\procmon.exe",
     "TSHARK_EXE": r"C:\Program Files\Wireshark\tshark.exe",
@@ -43,14 +43,14 @@ STATE = {
 # ========================================================
 
 def is_admin():
-    """ตรวจสอบว่า Agent กำลังรันด้วยสิทธิ์ Administrator หรือไม่"""
+    """Checks if the Agent is running with Administrator privileges."""
     try:
         return ctypes.windll.shell32.IsUserAnAdmin() != 0
     except:
         return False
 
 def cleanup_upload_folder():
-    """ล้างไฟล์ทั้งหมดในโฟลเดอร์อัปโหลด"""
+    """Clears all files in the upload folder."""
     print("Cleaning up upload folder...")
     for filename in os.listdir(CONFIG["UPLOAD_FOLDER"]):
         file_path = os.path.join(CONFIG["UPLOAD_FOLDER"], filename)
@@ -66,7 +66,7 @@ def kill_process_by_name(name):
     subprocess.run(f'taskkill /F /T /IM {name}.exe', shell=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
 
 def get_tshark_interface():
-    """ค้นหาหมายเลข Interface ของการ์ดแลนที่ใช้งานจริงแบบอัตโนมัติ"""
+    """Automatically detects the active network interface index."""
     try:
         output = subprocess.check_output([CONFIG["TSHARK_EXE"], "-D"], text=True)
         for line in output.splitlines():
@@ -128,9 +128,9 @@ def execute_malware():
         STATE["current_pcap"] = os.path.join(CONFIG["UPLOAD_FOLDER"], f"capture_{ts}.pcap")
         STATE["current_log"] = os.path.join(CONFIG["UPLOAD_FOLDER"], f"proc_{ts}.pml")
         
-        # 1. Start Tshark (อัปเดต BPF Filter ให้จับ C2 ขาออกได้แม่นขึ้น)
+        # 1. Start Tshark (Updated BPF filter for accurate C2 egress detection)
         active_interface = get_tshark_interface()
-        # ตัด Localhost และ Port ของ Flask/RDP ออก เพื่อจับเฉพาะ C2
+        # Exclude Localhost, Flask, and RDP ports to focus on C2 traffic
         bpf_filter = "not port 5000 and not port 3389 and not net 127.0.0.0/8" 
         tshark_cmd = [CONFIG["TSHARK_EXE"], "-i", active_interface, "-f", bpf_filter, "-w", STATE["current_pcap"], "-l"]
         STATE["tshark_process"] = subprocess.Popen(tshark_cmd)
@@ -145,12 +145,12 @@ def execute_malware():
         
         time.sleep(CONFIG["STABILIZATION_DELAY"])
         
-        # 3. Execute Malware (อัปเดตให้รันตรงๆ เพื่อจับ PID แม่นๆ)
+        # 3. Execute Malware (Run directly to capture accurate PID)
         if target_file.lower().endswith('.bat'):
-            # ถ้าเป็นสคริปต์ ให้รันผ่าน cmd
+            # If script, run via cmd.exe
             process = subprocess.Popen(['cmd.exe', '/c', target_file], cwd=CONFIG["UPLOAD_FOLDER"])
         else:
-            # ถ้าเป็น .exe ให้รันตรงๆ แบบไม่ผ่าน shell
+            # If .exe, run directly without shell
             process = subprocess.Popen(f'"{target_file}"', shell=True, cwd=CONFIG["UPLOAD_FOLDER"])
             
         return jsonify({
@@ -177,7 +177,7 @@ def terminate_api(pid):
 
     response_data = {"status": "terminated", "net_csv": None, "log_filtered": None}
 
-    # แปลง PCAP เป็น CSV
+    # Convert PCAP to CSV
     if STATE["current_pcap"] and os.path.exists(STATE["current_pcap"]):
         if os.path.getsize(STATE["current_pcap"]) > 0:
             net_csv = STATE["current_pcap"].replace(".pcap", "_net.csv")
@@ -188,7 +188,7 @@ def terminate_api(pid):
                 if os.path.exists(net_csv): response_data["net_csv"] = os.path.basename(net_csv)
             except Exception as e: print(f"Error converting PCAP: {e}")
 
-    # แปลง PML เป็น CSV
+    # Convert PML to CSV
     if STATE["current_log"] and os.path.exists(STATE["current_log"]):
         filt_csv = STATE["current_log"].replace(".pml", "_filtered.csv")
         try:
@@ -208,15 +208,15 @@ def download_file_api():
 
 if __name__ == '__main__':
     # ========================================================
-    # ระบบบังคับขอสิทธิ์ Administrator อัตโนมัติ (UAC Prompt)
+    # Automatic Administrator Privilege Request (UAC Prompt)
     # ========================================================
     if not is_admin():
         print("[-] Agent needs Administrator privileges to capture malware logs.")
         print("[*] Requesting UAC elevation...")
         try:
-            # สั่งรันตัวเองใหม่ด้วยสิทธิ์ Admin
+            # Relaunch agent with Administrator privileges
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
-            sys.exit(0) # ปิดโปรเซสตัวเก่าที่ไม่มีสิทธิ์ทิ้ง
+            sys.exit(0) # Exit the unprivileged process
         except Exception as e:
             print(f"[!] Elevation failed: {e}. Please manually run as Administrator.")
             sys.exit(1)

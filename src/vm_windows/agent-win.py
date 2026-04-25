@@ -22,7 +22,7 @@ CONFIG = {
     "CONVERSION_TIMEOUT_NET": 60
 }
 
-# สร้างโฟลเดอร์เก็บไฟล์หากยังไม่มี
+# Create upload folder if it doesn't exist
 if not os.path.exists(CONFIG["UPLOAD_FOLDER"]):
     os.makedirs(CONFIG["UPLOAD_FOLDER"])
 
@@ -102,13 +102,13 @@ def execute_malware():
     raw_path = data.get('file_path')
     if not raw_path: return jsonify({"error": "No file_path"}), 400
     
-    # แก้ไขปัญหา Path: ถ้าส่งแค่ชื่อไฟล์ ให้ไปหาที่โฟลเดอร์หลัก
+    # Path Fix: If only filename is provided, look in the upload folder
     if not os.path.isabs(raw_path):
         target_file = os.path.join(CONFIG["UPLOAD_FOLDER"], raw_path)
     else:
         target_file = raw_path
 
-    # ตรวจสอบว่าไฟล์มีอยู่จริงไหม
+    # Check if file exists
     if not os.path.exists(target_file):
         return jsonify({"error": f"File not found: {target_file}"}), 404
 
@@ -129,7 +129,7 @@ def execute_malware():
         procmon_cmd = f'"{CONFIG["PROCMON_EXE"]}" /BackingFile "{STATE["current_log"]}" /Quiet /AcceptEula'
         subprocess.Popen(procmon_cmd, shell=True)
         
-        # รอเครื่องมือพร้อม
+        # Wait for tools to be ready
         ready = False
         for _ in range(CONFIG["READINESS_RETRY"]):
             if is_process_running("tshark.exe") and is_process_running("procmon"):
@@ -139,7 +139,7 @@ def execute_malware():
         
         time.sleep(CONFIG["STABILIZATION_DELAY"])
         
-        # --- จุดแก้ไขสำคัญ: แก้ WinError 123 โดยกำหนด cwd ให้แน่นอน ---
+        # --- Critical Fix: Resolve WinError 123 by specifying explicit cwd ---
         process = subprocess.Popen(f'"{target_file}"', shell=True, cwd=CONFIG["UPLOAD_FOLDER"])
             
         return jsonify({

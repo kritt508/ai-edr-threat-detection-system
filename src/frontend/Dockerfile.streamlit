@@ -2,18 +2,18 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# 1. ปรับแต่งสภาพแวดล้อม Python เพื่อเพิ่มประสิทธิภาพการทำงาน
+# 1. Optimize Python environment for performance
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# 2. ติดตั้งเครื่องมือพื้นฐานและระบบประมวลผลโครงสร้างข้อมูลเจสัน (jq)
+# 2. Install essential tools and JSON processor (jq)
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     jq \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. ติดตั้งคลังคำสั่งสำหรับการแสดงผล การติดต่อสื่อสาร และการควบคุมทรัพยากรบนอาซัวร์
+# 3. Install libraries for UI, communication, and Azure resource management
 RUN pip install --no-cache-dir \
     streamlit \
     requests \
@@ -26,7 +26,7 @@ RUN pip install --no-cache-dir \
     azure-identity \
     azure-mgmt-compute
 
-# 4. กำหนดค่าการทำงานของระบบแสดงผลเพื่อให้สามารถบริการผ่านเครือข่ายได้อย่างเสถียร
+# 4. Configure UI system for stable network service
 RUN mkdir -p /root/.streamlit
 RUN bash -c 'echo -e "\
 [server]\n\
@@ -42,12 +42,12 @@ gatherUsageStats = false\n\
 serverAddress = \"202.29.55.61\"\n\
 " > /root/.streamlit/config.toml'
 
-# 5. คัดลอกรหัสคำสั่งและแฟ้มข้อมูลที่เกี่ยวข้องเข้าสู่ระบบจำลอง
+# 5. Copy source code and related files to the container
 COPY . /app
 
-# 6. กำหนดช่องทางการสื่อสารและตรวจสอบสถานะความพร้อมของระบบ
+# 6. Define communication ports and health check status
 EXPOSE 8501
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
-# 7. เริ่มต้นการทำงานของส่วนแสดงผลโดยระบุที่อยู่เครือข่ายให้ชัดเจน
+# 7. Initialize UI service with explicit network binding
 CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]

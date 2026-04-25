@@ -2,10 +2,10 @@ import sys
 import pandas as pd
 import json
 
-# Path ของไฟล์ CSV ที่ถูกส่งมาจาก n8n
+# Path of the CSV file sent from n8n
 file_path = sys.argv[1]
 
-# คอลัมน์จาก ProcMon ที่มีประโยชน์ที่สุดในการวิเคราะห์พฤติกรรม
+# Most relevant ProcMon columns for behavioral analysis
 RELEVANT_COLUMNS = [
     'Operation', 
     'Path', 
@@ -13,41 +13,40 @@ RELEVANT_COLUMNS = [
 ]
 
 try:
-    # อ่านไฟล์ CSV
+    # Load CSV file
     df = pd.read_csv(file_path, on_bad_lines='skip')
 
-    # ตรวจสอบว่ามีคอลัมน์ที่เราสนใจหรือไม่
+    # Verify if relevant columns exist
     available_columns = [col for col in RELEVANT_COLUMNS if col in df.columns]
 
     if not available_columns:
         print(json.dumps({"error": "CSV does not contain 'Operation', 'Path', or 'Detail' columns.", "file_path": file_path}))
         sys.exit()
 
-    # กรอง DataFrame ให้เหลือเฉพาะคอลัมน์ที่จำเป็น
+    # Filter DataFrame to include only essential columns
     filtered_df = df[available_columns]
 
-    # ลบแถวที่ข้อมูลเป็นค่าว่างทั้งหมด
+    # Remove rows where all data is null
     filtered_df = filtered_df.dropna(how='all')
 
-    # --- ส่วนสำคัญ: สรุปข้อมูล (Data Reduction) ---
-    # เพื่อป้องกัน AI Token Limit เกิน
-    # เราจะนับพฤติกรรม (แถว) ที่ซ้ำกัน
+    # --- Data Reduction: Condense information to prevent AI token limit overflow ---
+    # Count duplicate behaviors (rows)
     event_counts = filtered_df.groupby(available_columns).size().reset_index(name='count')
 
-    # จัดเรียงจากมากไปน้อย และเลือก 50 อันดับแรก
+    # Sort by frequency and select the top 50 unique events
     top_events_df = event_counts.sort_values(by='count', ascending=False).head(50)
 
-    # แปลง DataFrame สรุปนี้เป็น JSON string
+    # Convert the condensed DataFrame into a JSON string
     events_json = top_events_df.to_json(orient='records')
 
-    # เตรียมข้อมูลส่งออก
+    # Prepare final output data
     output = {
         "file_name": file_path.split('/')[-1],
         "total_unique_events": len(event_counts),
-        "top_50_events_for_analysis": json.loads(events_json) # แปลงกลับเป็น JSON object ให้ n8n
+        "top_50_events_for_analysis": json.loads(events_json) # Convert back to JSON object for n8n
     }
 
-    # พิมพ์ผลลัพธ์เป็น JSON String ให้ n8n (stdout)
+    # Output result as JSON string to stdout for n8n consumption
     print(json.dumps(output))
 
 except Exception as e:

@@ -13,27 +13,27 @@ import io
 API_URL = "http://streamlit_ui:5001/analyze" 
 
 # --- 🎨 PAGE CONFIG ---
-# อัปเดตชื่อบนแท็บเบราว์เซอร์
+# Browser tab configuration
 st.set_page_config(
-    page_title="การออกแบบและพัฒนาระบบรักษาความปลอดภัยปลายทางด้วยโมเดลภาษาขนาดใหญ่เพื่อการตรวจจับและป้องกันภัยไซเบอร์",
+    page_title="AI-Powered Endpoint Detection & Response (EDR) System",
     page_icon="🛡️",
     layout="wide"
 )
 
-# --- 💅 ENTERPRISE LIGHT THEME CSS (เหมาะสำหรับลงวิทยานิพนธ์) ---
+# --- 💅 ENTERPRISE LIGHT THEME CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&family=Share+Tech+Mono&display=swap');
     
-    /* พื้นหลังหลักสีขาว ตัวหนังสือสีเทาเข้มเกือบดำ */
+    /* White background, dark grey text */
     .stApp { background-color: #ffffff; color: #24292f; font-family: 'Sarabun', sans-serif; }
-    h1, h2, h3, h4 { color: #0969da; font-weight: 700; } /* หัวข้อสีน้ำเงินทางการ */
+    h1, h2, h3, h4 { color: #0969da; font-weight: 700; } /* Formal Blue headers */
     code { font-family: 'Share Tech Mono', monospace; color: #cf222e; background-color: #f6f8fa; padding: 2px 6px; border-radius: 4px; border: 1px solid #d0d7de; }
     
-    /* กล่องรายงานต่างๆ */
+    /* Report cards */
     .report-card { background: #ffffff; border: 1px solid #d0d7de; border-left: 4px solid #0969da; padding: 18px; border-radius: 6px; color: #24292f; line-height: 1.6; margin-bottom: 15px; white-space: pre-wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
     
-    /* ป้ายสถานะความเสี่ยง (สีสว่างขึ้น) */
+    /* Risk status badges */
     .badge-malicious { color: #cf222e; border: 1px solid #ff8182; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 18px; background: #ffebe9; }
     .badge-suspicious { color: #9a6700; border: 1px solid #d4a72c; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 18px; background: #fff8c5; }
     .badge-safe { color: #1a7f37; border: 1px solid #4ac26b; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 18px; background: #dafeef; }
@@ -42,22 +42,22 @@ st.markdown("""
     .pre-analysis-box { background: #f3f8ff; border: 1px solid #0969da; border-left: 5px solid #0969da; color: #24292f; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
     .criteria-box { background: #f6f8fa; border: 1px dashed #8c959f; padding: 15px; border-radius: 6px; font-size: 14px; color: #57606a; }
     
-    /* กล่องแสดงเวลา (อัปเดตใหม่ แก้อักษรมองไม่เห็น) */
+    /* Time boxes */
     .time-box-blue { background-color: #f0f7ff; border: 1px solid #d0d7de; border-left: 4px solid #0969da; padding: 12px 15px; border-radius: 6px; margin-bottom: 12px; color: #24292f; font-weight: bold; }
     .time-box-orange { background-color: #fff8c5; border: 1px solid #d0d7de; border-left: 4px solid #d4a72c; padding: 12px 15px; border-radius: 6px; margin-bottom: 12px; color: #24292f; font-weight: bold; }
     
-    /* ปรับปุ่มดาวน์โหลด */
+    /* Download button styling */
     .stDownloadButton button { background-color: #f6f8fa; border: 1px solid #d0d7de; color: #0969da; font-weight: bold; transition: all 0.2s; }
     .stDownloadButton button:hover { background-color: #0969da; color: #ffffff; border-color: #0969da; }
     
-    /* อนิเมชั่นสำหรับการรัน Sandbox */
+    /* Sandbox execution animations */
     @keyframes pulse-live { 0% { box-shadow: 0 0 0 0 rgba(9, 105, 218, 0.2); } 70% { box-shadow: 0 0 0 10px rgba(9, 105, 218, 0); } 100% { box-shadow: 0 0 0 0 rgba(9, 105, 218, 0); } }
     @keyframes blinker { 50% { opacity: 0; } }
     .live-sandbox-box { background: #ffffff; border: 1px solid #0969da; border-left: 5px solid #0969da; color: #24292f; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px; animation: pulse-live 2s infinite; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
     .live-sandbox-box span.blink-text { color: #cf222e; font-weight: bold; animation: blinker 1s linear infinite; }
     .completed-sandbox-box { background: #dafeef; border: 1px solid #1a7f37; border-left: 5px solid #1a7f37; color: #24292f; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px; }
     
-    /* แต่ง Tabs ให้ดูเป็นเอกสารมากขึ้น */
+    /* Document-style Tabs */
     .stTabs [data-baseweb="tab-list"] { gap: 4px; border-bottom: 1px solid #d0d7de; }
     .stTabs [data-baseweb="tab"] { background-color: #f6f8fa; border: 1px solid #d0d7de; border-bottom: none; border-radius: 6px 6px 0px 0px; padding: 8px 16px; color: #57606a; font-weight: bold; }
     .stTabs [aria-selected="true"] { background-color: #0969da; color: white; border-color: #0969da; }
@@ -65,7 +65,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 🔍 1. ฟังก์ชันวิเคราะห์ไส้ในไฟล์ (แยก OS)
+# ==========================================
+# 🔍 1. Static File Analysis (OS Identification)
 # ==========================================
 def analyze_file_static(file_bytes, filename):
     sha256_hash = hashlib.sha256(file_bytes).hexdigest()
@@ -77,45 +78,45 @@ def analyze_file_static(file_bytes, filename):
     target_env = "unknown"
     
     if file_bytes.startswith(b'MZ'):
-        os_target = "ระบบปฏิบัติการ Windows (ไฟล์โปรแกรมที่รันได้ .exe/.dll)"
-        sandbox_route = "🪟 ส่งไปยังกล่องทราย Windows (Azure VM)"
+        os_target = "Windows OS (Executable file .exe/.dll)"
+        sandbox_route = "🪟 Routing to Windows Sandbox (Azure VM)"
         target_env = "windows"
-        os_reason = "ตรวจสอบพบโครงสร้างไฟล์แบบ 'MZ Header' ซึ่งเป็นมาตรฐานของโปรแกรมบน Windows"
-        if ext and ext not in ['exe', 'dll', 'sys', 'scr', 'bin']: warning_msg = f"⚠️ ข้อสังเกต นามสกุลไฟล์คือ .{ext} แต่ไส้ในที่แท้จริงคือโปรแกรม Windows อาจเป็นการปลอมแปลงเพื่อหลอกผู้ใช้"
+        os_reason = "Detected 'MZ Header', a standard structure for Windows executables."
+        if ext and ext not in ['exe', 'dll', 'sys', 'scr', 'bin']: warning_msg = f"⚠️ Warning: Extension is .{ext} but internal structure is a Windows executable. Potential masquerading detected."
     elif file_bytes.startswith(b'\x7fELF'):
-        os_target = "ระบบปฏิบัติการ Linux (ไฟล์โปรแกรมที่รันได้ ELF)"
-        sandbox_route = "🐧 ส่งไปยังกล่องทราย Linux (Azure VM)"
+        os_target = "Linux OS (Executable ELF file)"
+        sandbox_route = "🐧 Routing to Linux Sandbox (Azure VM)"
         target_env = "linux"
-        os_reason = "ตรวจสอบพบโครงสร้างไฟล์แบบ 'ELF Header' ซึ่งเป็นมาตรฐานของโปรแกรมบน Linux"
-        if ext in ['exe', 'dll', 'txt', 'pdf', 'jpg', 'png']: warning_msg = f"⚠️ ข้อสังเกต นามสกุลไฟล์คือ .{ext} แต่ไส้ในที่แท้จริงคือโปรแกรม Linux"
+        os_reason = "Detected 'ELF Header', a standard structure for Linux executables."
+        if ext in ['exe', 'dll', 'txt', 'pdf', 'jpg', 'png']: warning_msg = f"⚠️ Note: Extension is .{ext} but internal structure is a Linux executable."
     elif file_bytes.startswith(b'#!'):
-        os_target = "ระบบปฏิบัติการ Linux (สคริปต์คำสั่ง)"
-        sandbox_route = "🐧 ส่งไปยังกล่องทราย Linux (Azure VM)"
+        os_target = "Linux OS (Shell Script)"
+        sandbox_route = "🐧 Routing to Linux Sandbox (Azure VM)"
         target_env = "linux"
-        os_reason = "ตรวจสอบพบสัญลักษณ์ '#!' (Shebang) ซึ่งใช้สำหรับรันสคริปต์บนระบบ Linux"
+        os_reason = "Detected '#!' (Shebang), used for Linux script execution."
     elif ext in ['csv', 'pcap', 'log', 'txt', 'bat', 'sh']:
         filename_lower = filename.lower()
         if 'linux' in filename_lower or ext == 'sh':
-            os_target = "สคริปต์หรือข้อมูลสำหรับระบบ Linux"
-            sandbox_route = "🐧 ส่งไปยังกล่องทราย Linux (Azure VM)"
+            os_target = "Linux Script or Data"
+            sandbox_route = "🐧 Routing to Linux Sandbox (Azure VM)"
             target_env = "linux"
-            os_reason = "ประเมินจากนามสกุลไฟล์ (.sh) หรือชื่อไฟล์"
+            os_reason = "Estimated based on .sh extension or filename."
         elif 'win' in filename_lower or 'proc' in filename_lower or ext == 'bat':
-            os_target = "สคริปต์หรือข้อมูลสำหรับระบบ Windows"
-            sandbox_route = "🪟 ส่งไปยังกล่องทราย Windows (Azure VM)"
+            os_target = "Windows Script or Data"
+            sandbox_route = "🪟 Routing to Windows Sandbox (Azure VM)"
             target_env = "windows"
-            os_reason = "ประเมินจากนามสกุลไฟล์ (.bat) หรือชื่อไฟล์"
+            os_reason = "Estimated based on .bat extension or filename."
         else:
-            os_target = "ข้อมูลหรือเอกสารทั่วไป (ไม่ใช่โปรแกรม)"
-            sandbox_route = "📦 วิเคราะห์ด้วยระบบพื้นฐาน"
+            os_target = "General Data or Document (Non-executable)"
+            sandbox_route = "📦 Routing to Basic Analysis System"
             target_env = "data"
-            os_reason = "เป็นนามสกุลไฟล์เอกสารทั่วไป ไม่มีโครงสร้างที่ใช้รันโปรแกรมได้โดยตรง"
+            os_reason = "General document extension. No direct executable structure detected."
     else:
-        os_target = "ไม่ทราบประเภทที่แน่ชัด"
-        sandbox_route = "📦 เลือกระบบวิเคราะห์อัตโนมัติ"
+        os_target = "Unknown File Type"
+        sandbox_route = "📦 Routing to Automated Analysis System"
         target_env = "unknown"
-        os_reason = "ไม่พบ Header มาตรฐานที่ระบุระบบปฏิบัติการเป้าหมายได้ชัดเจน"
-        if ext in ['exe', 'dll', 'elf', 'sh']: warning_msg = f"⚠️ ระวัง ไฟล์นามสกุล .{ext} แต่ไม่มีโครงสร้างโปรแกรมที่ถูกต้อง อาจเป็นไฟล์ที่ถูกดัดแปลง"
+        os_reason = "No standard headers found to clearly identify target OS."
+        if ext in ['exe', 'dll', 'elf', 'sh']: warning_msg = f"⚠️ Caution: File extension is .{ext} but lacks correct program structure. Potential file tampering."
 
     return sha256_hash, os_target, sandbox_route, magic_hex, warning_msg, target_env, os_reason
 
@@ -149,18 +150,18 @@ def create_gauge_chart(score):
 # 🖥️ 2. UI LAYOUT & SIDEBAR
 # ==========================================
 with st.sidebar:
-    st.markdown("### 🛠️ สถานะระบบ")
-    st.status("เซิร์ฟเวอร์พร้อมใช้งาน", state="complete")
+    st.markdown("### 🛠️ System Status")
+    st.status("Server Ready", state="complete")
     st.divider()
-    st.caption(f"โครงสร้างพื้นฐาน ห้องปฏิบัติการกล่องทราย (Sandbox)")
-    st.caption(f"สภาพแวดล้อมจำลอง เครื่องเสมือน Azure (Windows และ Linux)")
-    st.caption(f"เวลาปัจจุบัน {datetime.now().strftime('%H:%M:%S')}")
+    st.caption(f"Infrastructure: Sandbox Laboratory")
+    st.caption(f"Environment: Azure Virtual Machines (Windows & Linux)")
+    st.caption(f"Current Time: {datetime.now().strftime('%H:%M:%S')}")
 
-# อัปเดตหัวข้อหลักบนหน้าเว็บให้ตรงกับชื่อวิทยานิพนธ์
-st.markdown("<h2 style='color: #0969da;'>🛡️ การออกแบบและพัฒนาระบบรักษาความปลอดภัยปลายทางด้วยโมเดลภาษาขนาดใหญ่<br>เพื่อการตรวจจับและป้องกันภัยไซเบอร์</h2>", unsafe_allow_html=True)
-st.markdown("อัปโหลดไฟล์ต้องสงสัยเพื่อวิเคราะห์พฤติกรรมด้วย AI ภายในสภาพแวดล้อมจำลอง (Sandbox) ที่ปลอดภัย")
+# Main Header Configuration
+st.markdown("<h2 style='color: #0969da;'>🛡️ AI-Powered Endpoint Detection & Response (EDR) System<br>Advanced Malware Analysis & Threat Detection</h2>", unsafe_allow_html=True)
+st.markdown("Upload suspicious files for AI-driven behavioral analysis within a secure Sandbox environment.")
 
-uploaded_file = st.file_uploader("📂 ลากไฟล์มาวาง หรือคลิกเพื่ออัปโหลดไฟล์ที่ต้องการตรวจสอบ", help="รองรับไฟล์ทุกประเภท เช่น .exe, .sh, .pdf, .bat")
+uploaded_file = st.file_uploader("📂 Drag and drop or click to upload suspicious files", help="Supports various types: .exe, .sh, .pdf, .bat, etc.")
 
 if uploaded_file:
     t_start_perf = time.perf_counter()
@@ -180,13 +181,13 @@ if uploaded_file:
 
     st.markdown(f"""
     <div class='pre-analysis-box'>
-        <h4>🔍 การตรวจสอบโครงสร้างไฟล์เบื้องต้น (ก่อนนำไปรันจริง)</h4>
-        <strong>ชื่อไฟล์</strong> {uploaded_file.name} (ขนาด {file_size_str})<br>
-        <strong>รหัสแฮช (SHA-256)</strong> <code>{file_hash}</code><br>
-        <strong>รหัสข้อมูลส่วนหัว (Magic Bytes)</strong> <code>{magic_hex}</code><br>
-        <strong>ประเภทระบบปฏิบัติการเป้าหมาย</strong> <span style="color:#0969da; font-weight:bold;">{os_type_detected}</span><br>
-        <strong>เหตุผลการประเมิน</strong> {os_reason}<br><br>
-        <strong style='color:#1a7f37;'>🎯 เส้นทางการวิเคราะห์ {target_sandbox}</strong>
+        <h4>🔍 Pre-Execution Static Analysis</h4>
+        <strong>Filename</strong> {uploaded_file.name} (Size {file_size_str})<br>
+        <strong>Hash (SHA-256)</strong> <code>{file_hash}</code><br>
+        <strong>Magic Bytes</strong> <code>{magic_hex}</code><br>
+        <strong>Target Operating System</strong> <span style="color:#0969da; font-weight:bold;">{os_type_detected}</span><br>
+        <strong>Detection Rationale</strong> {os_reason}<br><br>
+        <strong style='color:#1a7f37;'>🎯 Analysis Route: {target_sandbox}</strong>
         {warning_html}
     </div>
     """, unsafe_allow_html=True)
@@ -202,12 +203,12 @@ if uploaded_file:
         live_tracker = st.empty()
         live_tracker.markdown(f"""
         <div class='live-sandbox-box'>
-            📡 <strong><span class='blink-text'>กำลังรันไฟล์ในระบบจำลอง</span></strong> [{start_time_stamp}] &nbsp; ส่งข้อมูลไปยัง <strong style="color: #0969da;">{target_sandbox}</strong>...
+            📡 <strong><span class='blink-text'>Executing in Sandbox</span></strong> [{start_time_stamp}] &nbsp; Forwarding to <strong style="color: #0969da;">{target_sandbox}</strong>...
         </div>
         """, unsafe_allow_html=True)
 
-        with st.status(f"🔬 ระบบกำลังดำเนินการวิเคราะห์...", expanded=True) as status_box:
-            st.write(f"📡 กำลังส่งข้อมูลไปยังระบบหลังบ้าน (n8n)...")
+        with st.status(f"🔬 System is performing analysis...", expanded=True) as status_box:
+            st.write(f"📡 Forwarding data to Backend Orchestrator (n8n)...")
             progress_bar_container = st.progress(0)
             status_text_container = st.empty()
             start_time = time.time()
@@ -226,7 +227,7 @@ if uploaded_file:
                     api_result['req_start'] = req_start
                     api_result['req_end'] = req_end
                 except requests.exceptions.Timeout:
-                    api_result['error'] = "หมดเวลาการเชื่อมต่อ (เกิน 10 นาที) เครื่องจำลองอาจจะค้าง หรือเปิดไม่สำเร็จ"
+                    api_result['error'] = "Connection Timeout (over 10 mins). Sandbox instance may be unresponsive."
                 except Exception as e:
                     api_result['error'] = str(e)
 
@@ -241,13 +242,13 @@ if uploaded_file:
                 elif progress < 98: progress += 0.02  
                 progress_bar_container.progress(int(progress))
                 
-                if progress < 20: msg = "กำลังสตาร์ทเครื่องจำลองบน Azure Cloud (รอประมาณ 1 นาที)..."
-                elif progress < 50: msg = "ส่งไฟล์เข้าสู่เครื่องจำลองและสั่งรัน..."
-                elif progress < 80: msg = "บันทึกพฤติกรรมไฟล์ และตรวจสอบการเชื่อมต่อเครือข่ายที่ผิดปกติ..."
-                elif progress < 98: msg = "รวบรวม Log ส่งให้ AI วิเคราะห์ (ขั้นตอนนี้อาจใช้เวลาหลายนาที)..."
-                else: msg = "กำลังสร้างรายงานสรุปผลภาษาไทย..."
+                if progress < 20: msg = "Initializing Azure Sandbox Instance (approx. 1 minute)..."
+                elif progress < 50: msg = "Injecting file and initiating execution..."
+                elif progress < 80: msg = "Capturing behavior logs and monitoring anomalous network connections..."
+                elif progress < 98: msg = "Aggregating logs for AI Analysis (this may take several minutes)..."
+                else: msg = "Generating detailed analysis report..."
                 
-                status_text_container.caption(f"**ความคืบหน้า {int(progress)}%** — {msg}")
+                status_text_container.caption(f"**Progress {int(progress)}%** — {msg}")
                 time.sleep(1) 
 
             progress_bar_container.progress(100)
@@ -279,20 +280,20 @@ if uploaded_file:
                         while isinstance(raw_data, list) and len(raw_data) > 0: raw_data = raw_data[0]
                         st.session_state[session_data_key] = raw_data
                     except ValueError:
-                        st.session_state[session_error_key] = f"ระบบหลังบ้านส่งข้อมูลผิดพลาด\nรายละเอียด {res.text}"
+                        st.session_state[session_error_key] = f"Backend communication error\nDetails: {res.text}"
                 else:
-                    st.session_state[session_error_key] = f"ข้อผิดพลาดจาก API {res.status_code}"
+                    st.session_state[session_error_key] = f"API Error: {res.status_code}"
             
             st.session_state[session_done_key] = True
             live_tracker.empty()
-            status_box.update(label="✅ การวิเคราะห์เสร็จสมบูรณ์ ดึงข้อมูลสำเร็จ", state="complete", expanded=False)
+            status_box.update(label="✅ Analysis Complete. Data Retrieved Successfully.", state="complete", expanded=False)
 
     # ==========================================
-    # 📊 แสดงผลลัพธ์
+    # 📊 Render Analysis Results
     # ==========================================
     if st.session_state.get(session_done_key, False):
         if session_error_key in st.session_state:
-            st.error(f"🛑 เกิดข้อผิดพลาดร้ายแรง {st.session_state[session_error_key]}")
+            st.error(f"🛑 Critical Error: {st.session_state[session_error_key]}")
         elif session_data_key in st.session_state:
             data = st.session_state[session_data_key]
             elapsed = st.session_state.get(session_elapsed_key, 0)
@@ -300,76 +301,76 @@ if uploaded_file:
             
             verdict = str(data.get("Status", "UNKNOWN")).upper()
             c2_flag = str(data.get("c2_detected", "No")).upper()
-            summary_text = data.get("Analysis_Summary", "ไม่มีข้อมูลสรุปพฤติกรรม")
+            summary_text = data.get("Analysis_Summary", "No behavioral summary available")
             full_report_str = data.get("Full_Report", "{}")
             
             if "APT29" in verdict or "MALWARE" in verdict:
-                score, thai_verdict, v_class = 10, "เป็นมัลแวร์ร้ายแรง (อันตรายระดับสูง)", "badge-malicious"
+                score, display_verdict, v_class = 10, "Critical Malware Detected (High Risk)", "badge-malicious"
             elif "BENIGN" in verdict:
-                score, thai_verdict, v_class = 1, "ไม่เป็นมัลแวร์ (ปลอดภัย)", "badge-safe"
+                score, display_verdict, v_class = 1, "Benign File (Clean)", "badge-safe"
             else:
-                score, thai_verdict, v_class = 5, "ไฟล์น่าสงสัย (ควรระวัง)", "badge-suspicious"
+                score, display_verdict, v_class = 5, "Suspicious Activity Detected (Warning)", "badge-suspicious"
 
             st.markdown(f"""
             <div class='completed-sandbox-box'>
-                ✅ <strong>วิเคราะห์สำเร็จ</strong> ประมวลผลเสร็จสิ้นเมื่อเวลา {datetime.now().strftime('%H:%M:%S')} (ใช้เวลารวม {elapsed:.1f} วินาที)
+                ✅ <strong>Analysis Successful</strong> Processing completed at {datetime.now().strftime('%H:%M:%S')} (Total duration: {elapsed:.1f} seconds)
             </div>
             """, unsafe_allow_html=True)
             
             st.divider()
             
             tab1, tab2, tab3, tab4 = st.tabs([
-                "📊 สรุปผลการวิเคราะห์", 
-                "📄 รายงานพฤติกรรมเชิงลึกโดย AI", 
-                "💻 ข้อมูลดิบจากระบบหลังบ้าน", 
-                "⏱️ ค่าสำหรับการทดลองและเวลาประมวลผล"
+                "📊 Analysis Summary", 
+                "📄 AI Behavioral Report", 
+                "💻 Raw Backend Data", 
+                "⏱️ Timeline & Performance Metrics"
             ])
             
             with tab1:
                 res_col1, res_col2 = st.columns([1, 2])
                 with res_col1:
                     st.plotly_chart(create_gauge_chart(score), use_container_width=True)
-                    st.markdown(f"<div style='text-align:center; margin-bottom: 20px;'><span class='{v_class}'>{thai_verdict}</span></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='text-align:center; margin-bottom: 20px;'><span class='{v_class}'>{display_verdict}</span></div>", unsafe_allow_html=True)
                     
                     st.markdown("""
                     <div class='criteria-box'>
-                        <strong>ℹ️ เกณฑ์การให้คะแนนความเสี่ยง (1-10)</strong><br>
-                        <span style="color:#1a7f37; font-weight:bold;">คะแนน 1-3 (ปลอดภัย)</span> ไฟล์ปกติ ไม่มีพฤติกรรมมุ่งร้าย<br>
-                        <span style="color:#9a6700; font-weight:bold;">คะแนน 4-7 (น่าสงสัย)</span> พบพฤติกรรมแปลกๆ แต่ยังไม่ชี้ชัดว่าเป็นไวรัส<br>
-                        <span style="color:#cf222e; font-weight:bold;">คะแนน 8-10 (อันตราย)</span> ตรวจพบพฤติกรรมโจมตี ดึงข้อมูล หรือติดต่อแฮกเกอร์
+                        <strong>ℹ️ Risk Scoring Criteria (1-10)</strong><br>
+                        <span style="color:#1a7f37; font-weight:bold;">Score 1-3 (Benign)</span> Normal file, no malicious behavior.<br>
+                        <span style="color:#9a6700; font-weight:bold;">Score 4-7 (Suspicious)</span> Anomalous behavior detected; caution advised.<br>
+                        <span style="color:#cf222e; font-weight:bold;">Score 8-10 (Malicious)</span> Direct threat, exfiltration, or C2 contact detected.
                     </div>
                     """, unsafe_allow_html=True)
                     
                     json_str = json.dumps(data, indent=4)
-                    st.download_button(label="📥 ดาวน์โหลดรายงานฉบับเต็ม (JSON)", data=json_str, file_name=f"REPORT_{file_hash[:8]}.json", mime="application/json", use_container_width=True)
+                    st.download_button(label="📥 Download Full Report (JSON)", data=json_str, file_name=f"REPORT_{file_hash[:8]}.json", mime="application/json", use_container_width=True)
 
                 with res_col2:
-                    st.markdown("### 🧠 สรุปพฤติกรรมของไฟล์โดยปัญญาประดิษฐ์")
+                    st.markdown("### 🧠 AI Behavioral Summary")
                     st.markdown(f"<div class='report-card'>{summary_text}</div>", unsafe_allow_html=True)
                     
-                    c2_status = "🚨 <span style='color:#cf222e; font-weight:bold;'>ตรวจพบการเชื่อมต่อไปยังเซิร์ฟเวอร์อันตราย (C2)</span>" if "YES" in c2_flag else "✅ ไม่พบการแอบส่งข้อมูลออกภายนอก"
+                    c2_status = "🚨 <span style='color:#cf222e; font-weight:bold;'>Critical: C2 Communication Detected</span>" if "YES" in c2_flag else "✅ No data exfiltration detected"
                     st.markdown(f"""
                     <div class='metric-box'>
-                        🌐 <strong>การตรวจสอบระบบเครือข่ายและการขโมยข้อมูล</strong><br><br>{c2_status}
+                        🌐 <strong>Network & Exfiltration Analysis</strong><br><br>{c2_status}
                     </div>
                     """, unsafe_allow_html=True)
 
             with tab2:
-                st.markdown("### 📑 รายงานพฤติกรรมเชิงลึกระดับเทคนิค")
+                st.markdown("### 📑 Detailed Technical Report")
                 try:
                     parsed_report = json.loads(full_report_str)
                     for key, val in parsed_report.items():
-                        st.markdown(f"**หัวข้อการวิเคราะห์ ({key})**")
+                        st.markdown(f"**Analysis Category ({key})**")
                         st.markdown(f"<div class='report-card'>{val}</div>", unsafe_allow_html=True)
                 except:
                     st.markdown(f"<div class='report-card'>{full_report_str}</div>", unsafe_allow_html=True)
             
             with tab3:
-                st.markdown("### 💻 ข้อมูลดิบที่ได้รับจาก n8n (JSON Format)")
+                st.markdown("### 💻 Raw n8n Data (JSON)")
                 st.json(data)
                 
             with tab4:
-                st.markdown("### ⏱️ ข้อมูลเวลาสำหรับการเขียนรายงานการทดลองวิจัย")
+                st.markdown("### ⏱️ Experimental Timeline Metrics")
                 
                 backend_total_ms = data.get("Total_Duration_MS", 0)
                 vm_duration_ms = data.get("VM_Duration_MS", 0)
@@ -380,33 +381,33 @@ if uploaded_file:
                     parsed_log = []
 
                 csv_data = []
-                csv_data.append({"เวลาที่บันทึก (มิลลิวินาที)": ui_timeline.get("1_UI_File_Uploaded_MS"), "แหล่งที่มา": "หน้าเว็บ (Streamlit)", "เหตุการณ์": "ผู้ใช้อัปโหลดไฟล์สำเร็จ", "รายละเอียดเพิ่มเติม": uploaded_file.name})
-                csv_data.append({"เวลาที่บันทึก (มิลลิวินาที)": ui_timeline.get("2_UI_Static_Analysis_Done_MS"), "แหล่งที่มา": "หน้าเว็บ (Streamlit)", "เหตุการณ์": "วิเคราะห์โครงสร้างไฟล์เสร็จสิ้น", "รายละเอียดเพิ่มเติม": f"ระบบปฏิบัติการที่พบ {os_type_detected}"})
-                csv_data.append({"เวลาที่บันทึก (มิลลิวินาที)": ui_timeline.get("3_API_Request_Sent_MS"), "แหล่งที่มา": "หน้าเว็บ (Streamlit)", "เหตุการณ์": "ส่งไฟล์ให้ระบบหลังบ้าน", "รายละเอียดเพิ่มเติม": f"รหัสแฮช {file_hash[:10]}..."})
+                csv_data.append({"Timestamp (ms)": ui_timeline.get("1_UI_File_Uploaded_MS"), "Source": "UI (Streamlit)", "Event": "File Upload Successful", "Additional Details": uploaded_file.name})
+                csv_data.append({"Timestamp (ms)": ui_timeline.get("2_UI_Static_Analysis_Done_MS"), "Source": "UI (Streamlit)", "Event": "Static Analysis Complete", "Additional Details": f"Detected OS: {os_type_detected}"})
+                csv_data.append({"Timestamp (ms)": ui_timeline.get("3_API_Request_Sent_MS"), "Source": "UI (Streamlit)", "Event": "Forwarding to Backend", "Additional Details": f"Hash: {file_hash[:10]}..."})
                 
                 for log_entry in parsed_log:
                     csv_data.append({
-                        "เวลาที่บันทึก (มิลลิวินาที)": log_entry.get("timestamp_ms", ""),
-                        "แหล่งที่มา": "ระบบหลังบ้าน (" + log_entry.get("source", "Backend") + ")",
-                        "เหตุการณ์": log_entry.get("event", ""),
-                        "รายละเอียดเพิ่มเติม": log_entry.get("details", "")
+                        "Timestamp (ms)": log_entry.get("timestamp_ms", ""),
+                        "Source": "Backend (" + log_entry.get("source", "Backend") + ")",
+                        "Event": log_entry.get("event", ""),
+                        "Additional Details": log_entry.get("details", "")
                     })
                 
-                csv_data.append({"เวลาที่บันทึก (มิลลิวินาที)": ui_timeline.get("4_API_Response_Received_MS"), "แหล่งที่มา": "หน้าเว็บ (Streamlit)", "เหตุการณ์": "ได้รับผลวิเคราะห์กลับมา", "รายละเอียดเพิ่มเติม": f"ผลสรุป {thai_verdict}"})
-                csv_data.append({"เวลาที่บันทึก (มิลลิวินาที)": ui_timeline.get("5_UI_Render_Complete_MS"), "แหล่งที่มา": "หน้าเว็บ (Streamlit)", "เหตุการณ์": "แสดงผลขึ้นหน้าจอเสร็จสมบูรณ์", "รายละเอียดเพิ่มเติม": ""})
+                csv_data.append({"Timestamp (ms)": ui_timeline.get("4_API_Response_Received_MS"), "Source": "UI (Streamlit)", "Event": "Analysis Result Received", "Additional Details": f"Final Verdict: {display_verdict}"})
+                csv_data.append({"Timestamp (ms)": ui_timeline.get("5_UI_Render_Complete_MS"), "Source": "UI (Streamlit)", "Event": "UI Render Complete", "Additional Details": ""})
 
                 df = pd.DataFrame(csv_data)
-                df = df.dropna(subset=['เวลาที่บันทึก (มิลลิวินาที)']) 
-                df['เวลาที่บันทึก (มิลลิวินาที)'] = pd.to_numeric(df['เวลาที่บันทึก (มิลลิวินาที)'])
-                df = df.sort_values(by="เวลาที่บันทึก (มิลลิวินาที)").reset_index(drop=True)
-                df['ระยะห่างจากขั้นตอนก่อนหน้า (มิลลิวินาที)'] = df['เวลาที่บันทึก (มิลลิวินาที)'].diff().fillna(0).astype(int)
+                df = df.dropna(subset=['Timestamp (ms)']) 
+                df['Timestamp (ms)'] = pd.to_numeric(df['Timestamp (ms)'])
+                df = df.sort_values(by="Timestamp (ms)").reset_index(drop=True)
+                df['Delta from Previous (ms)'] = df['Timestamp (ms)'].diff().fillna(0).astype(int)
 
                 csv_buffer = io.StringIO()
                 df.to_csv(csv_buffer, index=False)
                 csv_string = csv_buffer.getvalue()
 
                 st.download_button(
-                    label="📥 ดาวน์โหลดไฟล์ตารางเวลา (CSV)",
+                    label="📥 Download Timeline (CSV)",
                     data=csv_string,
                     file_name=f"TIMELINE_METRICS_{file_hash[:8]}.csv",
                     mime="text/csv",
@@ -417,29 +418,29 @@ if uploaded_file:
                 
                 col_front, col_back = st.columns(2)
                 
-                # --- อัปเดตส่วนแสดงผลเวลาให้เป็นกล่อง HTML ที่เห็นชัดเจน ---
+                # --- Update metrics display using HTML boxes ---
                 with col_front:
-                    st.markdown("#### 🖥️ เวลาที่ใช้ส่วนแสดงผล (Frontend)")
+                    st.markdown("#### 🖥️ Frontend Latency")
                     frontend_prep_display = ui_timeline.get('Metrics', {}).get('Frontend_PreProcessing_Latency_MS', 0)
                     roundtrip_display = ui_timeline.get('Metrics', {}).get('Backend_API_Roundtrip_Latency_MS', 0)
                     
                     st.markdown(f"""
                     <div class='time-box-blue'>
-                        ⏱️ เวลาเตรียมไฟล์ก่อนส่ง: <span style='color:#0969da;'>{frontend_prep_display:.2f} มิลลิวินาที</span>
+                        ⏱️ Pre-processing Latency: <span style='color:#0969da;'>{frontend_prep_display:.2f} ms</span>
                     </div>
                     <div class='time-box-blue'>
-                        ⏱️ เวลารวมตั้งแต่ส่งจนได้รับผล: <span style='color:#0969da;'>{roundtrip_display} มิลลิวินาที</span>
+                        ⏱️ Round-trip Latency: <span style='color:#0969da;'>{roundtrip_display} ms</span>
                     </div>
                     """, unsafe_allow_html=True)
                     
                 with col_back:
-                    st.markdown("#### ⚙️ เวลาที่ใช้ส่วนหลังบ้าน (Backend & VM)")
+                    st.markdown("#### ⚙️ Backend & VM Performance")
                     
                     st.markdown(f"""
                     <div class='time-box-orange'>
-                        ⏱️ เวลารวมของระบบ n8n: <span style='color:#9a6700;'>{backend_total_ms} มิลลิวินาที</span>
+                        ⏱️ n8n Execution Time: <span style='color:#9a6700;'>{backend_total_ms} ms</span>
                     </div>
                     <div class='time-box-orange'>
-                        ⏱️ เวลาในส่วนของกล่องทราย (Sandbox): <span style='color:#9a6700;'>{vm_duration_ms} มิลลิวินาที</span>
+                        ⏱️ Sandbox Execution Time: <span style='color:#9a6700;'>{vm_duration_ms} ms</span>
                     </div>
                     """, unsafe_allow_html=True)

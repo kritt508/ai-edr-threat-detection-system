@@ -14,7 +14,7 @@ app.url_map.strict_slashes = False
 # 1. GLOBAL CONFIGURATION (LINUX VERSION)
 # ========================================================
 CONFIG = {
-    "VERSION": "1.8.3-Linux-CRLF-Fixed", # อัปเดตเวอร์ชัน
+    "VERSION": "1.8.3-Linux-CRLF-Fixed", # Version Update
     "UPLOAD_FOLDER": "/tmp/malware_uploads",
     "TSHARK_EXE": "/usr/bin/tshark",
     "STRACE_EXE": "/usr/bin/strace",
@@ -65,23 +65,23 @@ def upload_file():
         file.save(file_path)
 
         # =======================================================
-        # 💡 [ULTIMATE FIX] ฟอกขาวไฟล์ Script ทันทีที่ถึงเซิร์ฟเวอร์
+        # 💡 [ULTIMATE FIX] Sanitize script files immediately upon arrival
         # =======================================================
         try:
             with open(file_path, 'rb') as f:
                 content = f.read()
 
-            # ตรวจสอบว่าเป็นไฟล์ Script (มี #! หรือนามสกุล .sh)
+            # Check if it's a script file (contains #! or .sh extension)
             if content.startswith(b'#!') or file.filename.endswith('.sh'):
                 if b'\r\n' in content:
-                    # แปลง CRLF (Windows) เป็น LF (Linux) แบบถาวร
+                    # Convert CRLF (Windows) to LF (Linux) permanently
                     content = content.replace(b'\r\n', b'\n')
                     with open(file_path, 'wb') as f:
                         f.write(content)
         except Exception as e:
-            pass # ถ้าเป็นไฟล์ Binary มัลแวร์ตัวอื่นๆ ให้ปล่อยผ่านไปเลย
+            pass # If it's a binary file or other malware, let it pass
 
-        # ตั้งสิทธิ์ให้ไฟล์เป็น Executable
+        # Set file permissions to Executable
         os.chmod(file_path, 0o755)
 
         return jsonify({

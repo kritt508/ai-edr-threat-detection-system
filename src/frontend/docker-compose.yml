@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: n8n_core
     restart: always
-    user: "root"  # 🌟 เพิ่มบรรทัดนี้: บังคับรันเป็นสิทธิ์ root แก้ปัญหา Permission Denied 100%
+    user: "root"  # 🌟 Added: Force run as root to eliminate Permission Denied errors 100%.
     networks:
       - malnet
     ports:

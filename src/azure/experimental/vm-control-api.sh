@@ -48,7 +48,7 @@ run_azure_api() {
             echo "$DATE: Sending start request for $VM_TYPE ($NAME)..."
             START_TIMER=$(date +%s)
             
-            # ส่งคำสั่ง Start
+            # Send Start command
             curl -X POST -s "https://management.azure.com/subscriptions/$SUB_ID/resourceGroups/$RG/providers/Microsoft.Compute/virtualMachines/$NAME/start?api-version=$API_VERSION" \
                  -H "Authorization: Bearer $TOKEN" -H "Content-Length: 0" > /dev/null
 
@@ -65,7 +65,7 @@ run_azure_api() {
                 sleep 5
             done
             
-            # --- ส่วนที่เพิ่ม: HTTP Health Check (Port 5000) ---
+            # --- Additional: HTTP Health Check (Port 5000) ---
             local SVC_URL=""
             [[ "$NAME" == "win" ]] && SVC_URL="http://win.sandbox.npu.world:5000/status"
             [[ "$NAME" == "CPE-Docker" ]] && SVC_URL="http://linux.sandbox.npu.world:5000/status"

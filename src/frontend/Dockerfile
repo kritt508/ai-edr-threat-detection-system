@@ -37,7 +37,7 @@ RUN pip install --upgrade pip && \
     maec pyattck mitreattack-python stix2 \
     azure-identity azure-mgmt-compute yara-python scapy
 
-# 🌟 สร้าง Folder ล่วงหน้าป้องกัน Error 
+# 🌟 Pre-create folders to prevent errors 
 RUN mkdir -p /home/node/.n8n /home/node/azure /home/node/project_malware
 
 WORKDIR /home/node/project_malware

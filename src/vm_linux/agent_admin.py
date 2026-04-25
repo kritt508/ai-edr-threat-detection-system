@@ -15,7 +15,7 @@ app.url_map.strict_slashes = False
 # 1. GLOBAL CONFIGURATION (LINUX VERSION)
 # ========================================================
 CONFIG = {
-    "VERSION": "2.0.0-Linux-Root-Enforced", # อัปเดตเวอร์ชัน
+    "VERSION": "2.0.0-Linux-Root-Enforced", # Version Update
     "UPLOAD_FOLDER": "/tmp/malware_uploads",
     "TSHARK_EXE": "/usr/bin/tshark",
     "STRACE_EXE": "/usr/bin/strace",
@@ -48,7 +48,7 @@ def get_status():
         "os": platform.system(),
         "status": "online",
         "version": CONFIG["VERSION"],
-        "is_root": os.geteuid() == 0, # แจ้ง n8n ว่ารันสิทธิ์สูงสุดอยู่ไหม
+        "is_root": os.geteuid() == 0, # Inform n8n if running with root privileges
         "supported_commands": ["POST /upload", "POST /execute", "POST /terminate/<pid>", "GET /list", "GET /status"],
         "upload_directory": CONFIG["UPLOAD_FOLDER"]
     }), 200
@@ -154,7 +154,7 @@ def execute_malware():
 def terminate_api(pid):
     response_data = {"status": "terminated"}
     try:
-        # 1. ปิดโปรเซสของมัลแวร์
+        # 1. Terminate malware process
         try:
             parent = psutil.Process(pid)
             for child in parent.children(recursive=True):
@@ -163,19 +163,19 @@ def terminate_api(pid):
         except psutil.NoSuchProcess:
             pass
 
-        # 2. ปิด tshark ให้ปลอดภัย ไม่ให้ไฟล์ pcap เสียหาย
+        # 2. Safely stop Tshark to prevent PCAP corruption
         if STATE["tshark_pid"]:
             try:
                 os.kill(STATE["tshark_pid"], signal.SIGINT)
-                time.sleep(2) # รอให้ tshark บันทึกไฟล์เสร็จ
-                os.kill(STATE["tshark_pid"], signal.SIGKILL) # บังคับปิดถ้ายังดื้อ
+                time.sleep(2) # Wait for Tshark to finish file writing
+                os.kill(STATE["tshark_pid"], signal.SIGKILL) # Force terminate if still running
             except ProcessLookupError:
                 pass
             STATE["tshark_pid"] = None
 
         time.sleep(2)
 
-        # 3. แปลงไฟล์ PCAP แบบป้องกัน Timeout (จำกัดเวลาที่ 30 วินาที)
+        # 3. Convert PCAP file with timeout protection (30s limit)
         if STATE["current_pcap"] and os.path.exists(STATE["current_pcap"]):
             net_csv = STATE["current_pcap"].replace(".pcap", "_net.csv")
             tshark_conv = [
@@ -218,7 +218,7 @@ def download_file():
 
 if __name__ == '__main__':
     # ========================================================
-    # ระบบบังคับขอสิทธิ์ Root
+    # Enforce Root Privileges
     # ========================================================
     if os.geteuid() != 0:
         print("[!] ERROR: This agent MUST be run as root to capture network traffic and system calls.")

@@ -1,4 +1,4 @@
-// 1. ดึงข้อมูลจากโหนด Extract (ตรวจสอบชื่อโหนดให้ตรงกับใน Workflow ของคุณนะครับ)
+// 1. Extract data from nodes (Ensure node names match your workflow)
 let processData = "";
 let networkData = "";
 
@@ -10,8 +10,8 @@ try {
     networkData = "No Network Data Found";
 }
 
-// 2. 🛡️ ฟังก์ชันคัดกรองข้อมูลสำคัญ (Linux High-Value Filter)
-// จะช่วยดึงเฉพาะ System Calls ที่มัลแวร์ชอบใช้มาให้ AI อ่าน
+// 2. 🛡️ High-Value Linux Filter Function
+// Extracts critical system calls commonly used by malware for AI analysis
 function filterLinuxLog(logStr) {
     if (!logStr) return "";
     const lines = logStr.split('\n');
@@ -21,7 +21,7 @@ function filterLinuxLog(logStr) {
         "rm -rf", "kill", "fork", "vfork", "write", "openat"
     ];
     
-    // กรองเอาเฉพาะบรรทัดที่มี Keyword สำคัญ
+    // Filter lines containing critical keywords
     const filteredLines = lines.filter(line => 
         suspiciousKeywords.some(kw => line.toLowerCase().includes(kw.toLowerCase()))
     );
@@ -29,22 +29,22 @@ function filterLinuxLog(logStr) {
     return filteredLines.length > 0 ? filteredLines.join('\n') : logStr;
 }
 
-// 3. ฟังก์ชันสำหรับตัดข้อมูลที่ยาวเกินไป
+// 3. Log truncation function
 function truncateLog(logStr, maxLength) {
     if (!logStr || logStr.length <= maxLength) return logStr;
     const half = Math.floor(maxLength / 2);
     return `${logStr.substring(0, half)}\n\n... [⚠️ LOG TRUNCATED] ...\n\n${logStr.slice(-half)}`;
 }
 
-// 4. ประมวลผลข้อมูล (คัดกรองก่อนแล้วค่อยตัด)
+// 4. Data processing (Filter first, then truncate)
 let filteredProcess = filterLinuxLog(processData);
 let filteredNetwork = filterLinuxLog(networkData);
 
-// จำกัดขนาดส่งให้ AI
+// Limit payload size for AI analysis
 processData = truncateLog(filteredProcess, 35000); 
 networkData = truncateLog(filteredNetwork, 10000);
 
-// 5. รวมข้อมูลส่งต่อให้ AI Agent
+// 5. Combine data for AI Agent
 return {
   combined_data: `### LINUX BEHAVIORAL ANALYSIS REPORT ###
 [SYSTEM OPERATING: LINUX]

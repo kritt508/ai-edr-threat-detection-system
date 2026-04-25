@@ -9,7 +9,7 @@ import pefile
 import hashlib
 from collections import Counter
 
-# นำเข้า Library สำหรับ Capa (ถ้ามี)
+# Import CAPA library (if available)
 try:
     import capa.main
     import capa.rules
@@ -20,7 +20,7 @@ try:
 except ImportError:
     CAPA_AVAILABLE = False
 
-# ตั้งค่า Argument Parser
+# Argument Parser Setup
 parser = argparse.ArgumentParser(description='Hybrid Malware Analysis (Signature + Anomaly)')
 parser.add_argument('--input', type=str, required=True, help='Input JSON string or file path')
 parser.add_argument('--rules', type=str, default='/opt/capa-rules', help='Path to CAPA rules')
@@ -31,7 +31,7 @@ args = parser.parse_args()
 # ==========================================
 
 def calculate_entropy(data):
-    """คำนวณ Shannon Entropy (บทที่ 2.6.1) [cite: 210]"""
+    """Calculates Shannon Entropy (Chapter 2.6.1) [cite: 210]"""
     if not data: return 0
     entropy = 0
     for x in range(256):
@@ -41,7 +41,7 @@ def calculate_entropy(data):
     return entropy
 
 def detect_beaconing(network_logs):
-    """ตรวจจับ Beaconing (บทที่ 2.6.2) [cite: 213]"""
+    """Detects Beaconing activity (Chapter 2.6.2) [cite: 213]"""
     beacon_scores = []
     if not network_logs: return []
 
@@ -55,14 +55,14 @@ def detect_beaconing(network_logs):
     for ip, group in grouped:
         if len(group) < 4: continue
         
-        # คำนวณความสม่ำเสมอของเวลา (Variance)
+        # Calculate time delta consistency (Variance)
         sorted_times = group['UtcTime'].sort_values()
         time_deltas = sorted_times.diff().dt.total_seconds().dropna()
         
         variance = time_deltas.var()
         mean_interval = time_deltas.mean()
         
-        # Threshold: Variance < 10 ถือว่าจังหวะเป๊ะมาก (Robot/Botnet)
+        # Threshold: Variance < 10 indicates highly consistent timing (Robot/Botnet)
         if variance < 10.0 and mean_interval > 0:
             beacon_scores.append({
                 "type": "Beaconing Detected",
@@ -78,7 +78,7 @@ def detect_beaconing(network_logs):
 # ==========================================
 
 def analyze_pe_file(file_path):
-    """วิเคราะห์โครงสร้างไฟล์ PE และ Capa Capabilities """
+    """Analyzes PE file structure and CAPA capabilities"""
     results = []
     score_bump = 0.0
     
@@ -88,11 +88,11 @@ def analyze_pe_file(file_path):
     try:
         pe = pefile.PE(file_path)
         
-        # 2.1 ตรวจสอบ Import Hash (Imphash)
+        # 2.1 Check Import Hash (Imphash)
         imphash = pe.get_imphash()
         results.append({"type": "Signature", "key": "Imphash", "value": imphash})
         
-        # 2.2 ตรวจสอบ Section Entropy (หา Packed Code)
+        # 2.2 Check Section Entropy (Look for Packed Code)
         for section in pe.sections:
             entropy = section.get_entropy()
             if entropy > 7.5: # Packed section detected
@@ -103,11 +103,11 @@ def analyze_pe_file(file_path):
                     "entropy": f"{entropy:.2f}"
                 })
 
-        # 2.3 Capa Analysis (ถ้ามี Library และ Rules)
+        # 2.3 Capa Analysis (If library and rules exist)
         if CAPA_AVAILABLE and os.path.exists(args.rules):
-            # หมายเหตุ: การเรียก Capa ผ่าน Python script ค่อนข้างซับซ้อน 
-            # ในที่นี้จะจำลองผลลัพธ์เพื่อไม่ให้ Script พัง หรือใส่ Logic เรียก subprocess ได้
-            # เพื่อความเสถียรของ POC เราจะเช็ค PE เบื้องต้นก่อน
+            # Note: Calling CAPA via Python script is complex
+            # Placeholder results are used here to prevent script failure; subprocess logic can be added later
+            # For POC stability, basic PE checks are prioritized
             pass
 
     except Exception as e:
@@ -121,7 +121,7 @@ def analyze_pe_file(file_path):
 
 def main():
     try:
-        # 1. รับข้อมูล Input
+        # 1. Ingest Input Data
         try:
             input_data = json.loads(args.input)
         except:
@@ -131,7 +131,7 @@ def main():
             else:
                 input_data = []
 
-        # ถ้า Input เข้ามาเป็น Dict เดียว ให้แปลงเป็น List
+        # Convert single Dict input to List
         if isinstance(input_data, dict):
             input_data = [input_data]
 
@@ -141,20 +141,20 @@ def main():
             "details": []
         }
 
-        # 2. แยกประเภท Log
+        # 2. Segregate Log Types
         network_events = [x for x in input_data if x.get('EventID') == 3]
         process_events = [x for x in input_data if x.get('EventID') == 1]
 
         # ---------------------------------------------------------
-        # A. Hybrid Analysis: Signature & Static (ถ้ามีไฟล์จริง)
+        # A. Hybrid Analysis: Signature & Static (If file exists)
         # ---------------------------------------------------------
-        # เช็คว่าใน Log มีการอ้างถึงไฟล์ไหนบ้าง (Image Path)
+        # Identify referenced files in the log (Image Path)
         target_files = set([x.get('Image') for x in process_events if x.get('Image')])
         
         for file_path in target_files:
-            # หมายเหตุ: ใน Docker, path ของ Windows (C:\...) จะไม่ตรงกับ Linux
-            # ต้องมีการ Map Volume หรือ Mock file ใน /home/node/malware_samples/
-            # แต่ถ้าเป็นการทดสอบ ให้ลองเช็คว่าไฟล์มีจริงไหม
+            # Note: In Docker, Windows paths (C:\...) won't match Linux paths
+            # Requires volume mapping or mock files in /home/node/malware_samples/
+            # Check if file exists for testing purposes
             if os.path.exists(file_path):
                 static_details, score = analyze_pe_file(file_path)
                 analysis_result["threat_score"] += score
@@ -183,12 +183,12 @@ def main():
             analysis_result["details"].extend(beacons)
 
         # ---------------------------------------------------------
-        # D. สรุปผล (Consensus Input)
+        # D. Conclusion (Consensus Input)
         # ---------------------------------------------------------
         if analysis_result["threat_score"] > 0.8:
             analysis_result["is_anomaly"] = True
             
-        # จำกัด Score ไม่ให้เกิน 1.0 (หรือ 100%)
+        # Limit score to 1.0 (100%) maximum
         analysis_result["threat_score"] = min(analysis_result["threat_score"], 1.0)
 
         print(json.dumps(analysis_result))

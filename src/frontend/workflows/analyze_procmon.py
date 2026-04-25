@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import os
 
-# รับ Path ของไฟล์ Log จาก Argument ที่ n8n ส่งมา
+# Receive log file path from argument passed by n8n
 if len(sys.argv) < 2:
     print(json.dumps({"error": "No input file provided"}))
     sys.exit(1)
@@ -18,30 +18,30 @@ results = {
 }
 
 try:
-    # 1. โหลด IoCs ของ APT29
+    # 1. Load APT29 IoCs
     if os.path.exists(ioc_file_path):
         with open(ioc_file_path, 'r') as f:
             iocs = json.load(f)
     else:
         iocs = []
 
-    # 2. อ่านไฟล์ Log (สมมติว่าเป็น CSV จาก Sysmon/Procmon)
-    # ถ้าไฟล์จริงเป็น JSON ให้เปลี่ยนเป็น pd.read_json
+    # 2. Read log file (Assuming CSV from Sysmon/Procmon)
+    # If actual file is JSON, use pd.read_json instead
     df = pd.read_csv(log_file_path, encoding='utf-8-sig', on_bad_lines='skip')
     
-    # 3. เริ่มกระบวนการวิเคราะห์ (Threat Hunting)
+    # 3. Initiate Threat Hunting analysis
     detected = []
 
-    # 3.1 ตรวจสอบชื่อไฟล์อันตราย (RDP Files ตามคลิปวิดีโอ)
+    # 3.1 Check for malicious filenames (e.g., malicious RDP files)
     rdp_threats = [ioc['value'] for ioc in iocs if ioc['type'] == 'filename']
     for threat in rdp_threats:
-        # สมมติ column ใน log ชื่อ 'ProcessName' หรือ 'TargetFilename'
+        # Assume log column is named 'ProcessName' or 'TargetFilename'
         if 'TargetFilename' in df.columns:
             matches = df[df['TargetFilename'].str.contains(threat, case=False, na=False)]
             if not matches.empty:
                 detected.append(f"CRITICAL: Found APT29 Phishing File -> {threat}")
 
-    # 3.2 ตรวจสอบ Command Line (เช่น Powershell encoded)
+    # 3.2 Check command line arguments (e.g., encoded PowerShell)
     cmd_threats = [ioc['value'] for ioc in iocs if ioc['type'] == 'command_line']
     for threat in cmd_threats:
         if 'CommandLine' in df.columns:
@@ -49,7 +49,7 @@ try:
             if not matches.empty:
                 detected.append(f"SUSPICIOUS: Potential Living-off-the-Land tactic -> {threat}")
 
-    # 3.3 ตรวจสอบ IP Address (C2 Communication)
+    # 3.3 Check IP addresses (C2 Communication)
     ip_threats = [ioc['value'] for ioc in iocs if ioc['type'] == 'ip']
     for threat in ip_threats:
         if 'DestinationIp' in df.columns:
@@ -57,13 +57,13 @@ try:
             if not matches.empty:
                 detected.append(f"HIGH: Connection to known APT29 C2 -> {threat}")
 
-    # 4. สรุปผล
+    # 4. Summary
     if detected:
         results["status"] = "infected"
         results["detected_threats"] = detected
         results["analysis_summary"] = f"Detected {len(detected)} potential threats linked to Midnight Blizzard."
     
-    # ส่งผลลัพธ์กลับไปให้ n8n ในรูปแบบ JSON
+    # Return results to n8n in JSON format
     print(json.dumps(results))
 
 except Exception as e:
