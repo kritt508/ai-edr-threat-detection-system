@@ -59,8 +59,8 @@ The system has been successfully validated against advanced real-world malware a
 ### 1. Automated SOAR Workflow (n8n)
 ![n8n Workflow](docs/n8n_workflow.png)
 
-### 2. Threat Analysis Dashboard
-![Dashboard Result](docs/dashboard_result.png)
+### 2. Real-World Threat Detection (Cobalt Strike Beacon)
+![Threat Analysis Dashboard (Cobalt Strike)](docs/dashboard_result.png)
 
 
 ---
