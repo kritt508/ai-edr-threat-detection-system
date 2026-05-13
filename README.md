@@ -20,6 +20,7 @@ Developed to bridge the gap between traditional signature-based detection and mo
 This system heavily incorporates enterprise-grade cybersecurity practices:
 * **Dynamic Analysis & Sandboxing:** Securely detonating potentially malicious payloads in isolated, ephemeral Microsoft Azure Virtual Machines.
 * **Network & Endpoint Telemetry Collection:** Utilizing `TShark` for deep packet inspection (PCAP) and `Procmon/Strace` for capturing system calls, registry modifications, and process trees.
+* **Sandbox Noise Exclusion:** Engineered precise telemetry filters to exclude monitoring tool activity (e.g., Procmon, TShark) from threat assessments, significantly reducing false positives and ensuring high-fidelity AI analysis.
 * **MITRE ATT&CK Mapping:** Automatically mapping observed behaviors to the MITRE ATT&CK framework (e.g., T1055 Process Injection, T1497 Sandbox Evasion).
 * **Threat Intelligence & RAG:** Leveraging Retrieval-Augmented Generation to provide context-aware insights based on historical cyber threat intelligence.
 
@@ -28,6 +29,7 @@ This system heavily incorporates enterprise-grade cybersecurity practices:
 ## 🚀 Key Features
 * **🔍 Cross-Platform Sandboxing:** Automated analysis environments provisioned on-the-fly for both Windows (`.exe`, `.bat`) and Linux (`.elf`, `.sh`) architectures.
 * **🧠 AI-Based Threat Hunting:** Utilizes Google Gemini LLM with RAG to analyze massive volumes of raw system calls and network traffic logs, identifying malicious intent.
+* **⚖️ Dynamic Threat Categorization:** Moving beyond rigid locked rulesets, the AI agent dynamically evaluates actual log data to categorize results as CLEAN, INFECTED, or specific threat actors (e.g., APT29).
 * **📡 C2 & Beaconing Detection:** Pinpoints abnormal outbound connections, DGA (Domain Generation Algorithms), and encrypted C2 communications.
 * **⚙️ SOAR Automation Workflow:** Fully automated orchestration managed by **n8n**, covering file ingestion, VM provisioning, execution, log extraction, and secure teardown (Infrastructure as Code principles).
 * **📊 Risk Scoring & Reporting:** Generates human-readable, actionable threat reports for Security Operations Center (SOC) analysts.
@@ -82,41 +84,5 @@ The system is optimized for **Linux/WSL** environments, which is the industry st
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/kritt508/ai-edr-threat-detection-system.git
+git clone [https://github.com/kritt508/ai-edr-threat-detection-system.git](https://github.com/kritt508/ai-edr-threat-detection-system.git)
 cd ai-edr-threat-detection-system
-```
-
-### 2. Quick Setup (Recommended)
-Use the automated Linux script to set up your environment, virtual machine, and dependencies:
-```bash
-make setup
-```
-*Alternatively, run: `chmod +x setup.sh && ./setup.sh`*
-
-### 3. Environment Configuration
-Update the `.env` file with your credentials:
-```bash
-nano .env
-```
-
-### 4. Running the System
-**Option A: Local Deployment**
-```bash
-make run
-```
-
-**Option B: Docker Deployment (Recommended)**
-```bash
-make docker-up
-```
-
-### 5. Access the Platform
-* **EDR Dashboard:** `http://localhost:8501`
-* **n8n SOAR Workflow Editor:** `http://localhost:5678`
-
-
----
-
-## ⚠️ Disclaimer
-**For Educational and Research Purposes Only.** 
-Do not upload or execute live malware outside of the provided isolated sandbox environment. The author is not responsible for any damage caused by the misuse of this platform or accidental execution of malicious payloads on host machines.
