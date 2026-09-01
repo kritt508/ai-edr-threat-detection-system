@@ -40,7 +40,7 @@ Malware Ingestion
 
 ## Architecture
 
-![System Architecture](docs/architecture.png)
+![System Architecture](docs/System_Architecture01.pdf)
 
 The architecture separates orchestration, sandbox execution, telemetry collection, AI analysis, and reporting so each stage can be tested and improved independently. Ephemeral infrastructure keeps analysis environments disposable, while telemetry filtering reduces noise from monitoring tools and improves the quality of AI-assisted judgments.
 
