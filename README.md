@@ -7,9 +7,7 @@ Language Models for Cyber Threat Detection and Mitigation
 [![Security](https://img.shields.io/badge/Security-Blue%20Team-darkred.svg)](#security-focus)
 [![Last Commit](https://img.shields.io/github/last-commit/kritt508/ai-edr-threat-detection-system)](https://github.com/kritt508/ai-edr-threat-detection-system/commits/main)
 
-An AI-assisted Endpoint Detection and Response (EDR) and malware sandboxing platform for automated behavior analysis across Windows and Linux payloads. The system orchestrates isolated Azure VM sandboxes, collects endpoint and network telemetry, applies Gemini-based analysis with retrieval-augmented context, and generates SOC-ready threat reports mapped to MITRE ATT&CK techniques.
-
-This project was built as a blue-team security engineering portfolio project to demonstrate malware analysis automation, SOAR orchestration, telemetry engineering, LLM-assisted threat hunting, and practical detection reporting.
+An automated malware analysis and behavioral detection platform designed to analyze suspicious Windows and Linux payloads safely. Built on disposable Microsoft Azure VM sandboxes and orchestrated via n8n, the pipeline captures runtime endpoint and network telemetry (Procmon, TShark) and leverages Google Gemini with Retrieval-Augmented Generation (RAG) to generate structured, MITRE ATT&CK-mapped SOC incident reports.
 
 ## Results
 
