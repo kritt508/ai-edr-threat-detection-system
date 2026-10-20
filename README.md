@@ -1,4 +1,5 @@
-# AI-powered EDR for cross-platform threat analysis
+# Design and Implementation of an Endpoint Security System Using Large
+Language Models for Cyber Threat Detection and Mitigation
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
