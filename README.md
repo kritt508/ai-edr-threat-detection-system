@@ -1,32 +1,29 @@
-# Design and Implementation of an Endpoint Security System Using Large
-Language Models for Cyber Threat Detection and Mitigation
-
+# AI-powered EDR for cross-platform threat analysis
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Security](https://img.shields.io/badge/Security-Blue%20Team-darkred.svg)](#security-focus)
 [![Last Commit](https://img.shields.io/github/last-commit/kritt508/ai-edr-threat-detection-system)](https://github.com/kritt508/ai-edr-threat-detection-system/commits/main)
 
-An automated malware analysis and behavioral detection platform designed to analyze suspicious Windows and Linux payloads safely. Built on disposable Microsoft Azure VM sandboxes and orchestrated via n8n, the pipeline captures runtime endpoint and network telemetry (Procmon, TShark) and leverages Google Gemini with Retrieval-Augmented Generation (RAG) to generate structured, MITRE ATT&CK-mapped SOC incident reports.
+An automated malware analysis platform for Windows and Linux. It runs suspicious payloads in disposable Microsoft Azure VMs, collects endpoint and network telemetry, and uses Google Gemini with retrieval-augmented generation (RAG) to produce SOC reports mapped to MITRE ATT&CK.
 
 ## Results
 
 - 85.33% overall detection accuracy across tested malware families and simulated threats.
-- 95.00% recall for sophisticated behaviors such as process injection, C2 beaconing, sandbox evasion, and abnormal outbound communication.
-- Validated against APT-style simulations, RATs/stealers, Cobalt Strike-style beacons, IoT/Linux botnets, and evasion-focused samples.
+- 95.00% recall for process injection, C2 beaconing, sandbox evasion, and abnormal outbound communication.
+- Tested with APT-style simulations, RATs and stealers, Cobalt Strike-style beacons, IoT/Linux botnets, and evasion-focused samples.
 
-## Key Capabilities
+## Capabilities
 
-- Cross-platform sandboxing for Windows payloads such as `.exe` and `.bat`, plus Linux payloads such as `.elf` and `.sh`.
-- Automated SOAR workflow using n8n for ingestion, VM provisioning, payload execution, telemetry extraction, report generation, and secure teardown.
-- Endpoint telemetry collection using Procmon, Strace, Sysinternals, and process-tree analysis.
-- Network telemetry collection using TShark and packet-level inspection for C2, beaconing, DGA-like patterns, and suspicious outbound traffic.
-- AI-assisted behavioral analysis using Google Gemini and RAG-style contextual enrichment.
-- Dynamic threat categorization into clean, infected, or specific threat-family/actor-style outcomes when supported by observed behavior.
-- MITRE ATT&CK mapping for behaviors such as process injection, sandbox evasion, and command-and-control activity.
-- Analyst-friendly reporting with risk scoring, observed indicators, behavioral summaries, and recommended response actions.
+- Runs Windows `.exe` and `.bat` payloads, plus Linux `.elf` and `.sh` payloads, in isolated sandboxes.
+- Automates ingestion, VM provisioning, execution, telemetry collection, reporting, and teardown through n8n.
+- Collects endpoint telemetry with Procmon, Strace, Sysinternals, psutil, and process-tree analysis.
+- Inspects network traffic with TShark and PCAP analysis for C2, beaconing, DGA-like patterns, and suspicious outbound traffic.
+- Uses Gemini and RAG-based context to analyze behavior and map it to MITRE ATT&CK.
+- Classifies activity as clean, infected, or a specific threat family or actor style when the evidence supports it.
+- Produces analyst reports with risk scores, indicators, behavior summaries, and response recommendations.
 
-## System Workflow
+## Workflow
 
 ```text
 Malware Ingestion
@@ -42,40 +39,33 @@ Malware Ingestion
 
 ![System Architecture](docs/System_Architecture.png)
 
-The architecture separates orchestration, sandbox execution, telemetry collection, AI analysis, and reporting so each stage can be tested and improved independently. Ephemeral infrastructure keeps analysis environments disposable, while telemetry filtering reduces noise from monitoring tools and improves the quality of AI-assisted judgments.
+Orchestration, sandbox execution, telemetry collection, analysis, and reporting run as separate stages. Disposable VMs isolate execution, and telemetry filtering removes noise from monitoring tools.
 
-## System Previews
+## Previews
 
-### Automated SOAR Workflow
+### Automated SOAR workflow
 
 ![n8n Workflow](docs/n8n_workflow.png)
 
-### Threat Analysis Dashboard
+### Threat analysis dashboard
 
 ![Threat Analysis Dashboard](docs/dashboard_main.png)
 
-## Security Focus
+## Security focus
 
-This project emphasizes defensive security use cases:
+The project supports defensive analysis through isolated malware execution, endpoint and network telemetry, noise filtering, MITRE ATT&CK mapping, and SOC-ready reports. Analysis infrastructure is torn down after execution.
 
-- Dynamic malware behavior analysis in isolated environments.
-- High-fidelity telemetry capture from endpoint and network sources.
-- Sandbox noise exclusion to reduce false positives from analysis tooling.
-- MITRE ATT&CK-aligned behavior interpretation.
-- SOC-readable reporting for investigation and response.
-- Safe teardown of analysis infrastructure after execution.
+> For authorized security research, malware-analysis education, and blue-team portfolio use. Never run unknown payloads outside a controlled, isolated lab.
 
-> This repository is intended for authorized security research, malware analysis education, and blue-team portfolio demonstration only. Do not execute unknown payloads outside a controlled and isolated lab environment.
-
-## Tested Threat Categories
+## Tested threat categories
 
 - APT-style behavior simulations, including APT29-inspired scenarios.
-- Remote access trojan and stealer-style behavior, including ValleyRAT-style patterns.
+- RAT and stealer behavior, including ValleyRAT-style patterns.
 - Cobalt Strike-style beaconing and command-and-control communication.
 - Linux/IoT botnet behavior, including Mirai and Gafgyt-style variants.
 - Evasion behavior such as sleep patching and environment checks.
 
-## Tech Stack
+## Tech stack
 
 | Area | Tools |
 | --- | --- |
@@ -89,7 +79,7 @@ This project emphasizes defensive security use cases:
 | Data Processing | pandas, NumPy |
 | Storage and Tracking | PostgreSQL, Airtable |
 
-## Repository Structure
+## Repository structure
 
 ```text
 src/
@@ -103,7 +93,7 @@ docs/           Architecture and dashboard screenshots
 
 ## Setup
 
-The project is optimized for Linux or WSL-based security workflows.
+The project is designed for Linux or WSL-based security workflows.
 
 ### 1. Clone the repository
 
@@ -145,10 +135,6 @@ streamlit run app.py
 ```bash
 python src/azure/api_server.py
 ```
-
-## Portfolio Summary
-
-Built an AI-powered EDR and malware sandboxing platform that automates cross-platform threat analysis using Azure VM sandboxes, endpoint and network telemetry, n8n SOAR workflows, and Gemini-based behavioral analysis. The system detects suspicious execution patterns, C2 beaconing, process injection, sandbox evasion, and botnet-style behavior, then generates SOC-ready threat reports with risk scoring and MITRE ATT&CK mapping.
 
 ## License
 
