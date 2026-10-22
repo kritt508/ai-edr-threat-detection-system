@@ -140,4 +140,3 @@ The Compose file mounts `src/azure` and the root `.env` into the containers. Azu
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-Readme.md
