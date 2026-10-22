@@ -46,4 +46,4 @@ fi
 # 6. Final message
 echo -e "${GREEN}✅ Setup complete!${NC}"
 echo -e "${BLUE}To activate the environment, run: ${NC}source venv/bin/activate"
-echo -e "${BLUE}To run the app, use: ${NC}python src/main.py (or use 'make run' if Makefile is present)"
+echo -e "${BLUE}To run the dashboard, use: ${NC}make run"

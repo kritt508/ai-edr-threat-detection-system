@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: n8n_core
     restart: always
-    user: "root"  # 🌟 Added: Force run as root to eliminate Permission Denied errors 100%.
+    user: "root"
     networks:
       - malnet
     ports:
@@ -36,7 +36,8 @@ services:
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
     volumes:
       - n8n_data:/home/node/.n8n
-      - /home/cpe/azure:/home/node/azure
+      - ../azure:/home/node/azure
+      - ../../.env:/home/node/azure/.env:ro
     depends_on:
       - db
 
@@ -59,7 +60,8 @@ services:
       - API_URL=http://n8n_core:5678/webhook/analyze-malware
     volumes:
       - ./:/app
-      - /home/cpe/azure:/home/node/azure
+      - ../azure:/home/node/azure
+      - ../../.env:/home/node/azure/.env:ro
     depends_on:
       - n8n
     command: >
