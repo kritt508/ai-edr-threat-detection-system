@@ -1,46 +1,54 @@
-# Design and Implementation of an Endpoint Security System Using Large
-Language Models for Cyber Threat Detection and Mitigation
+# Design and Implementation of an Endpoint Security System Using Large Language Models for Cyber Threat Detection and Mitigation
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Security](https://img.shields.io/badge/Security-Blue%20Team-darkred.svg)](#security-focus)
 [![Last Commit](https://img.shields.io/github/last-commit/kritt508/ai-edr-threat-detection-system)](https://github.com/kritt508/ai-edr-threat-detection-system/commits/main)
 
-An automated malware analysis platform for Windows and Linux. It runs suspicious payloads in disposable Microsoft Azure VMs, collects endpoint and network telemetry, and uses Google Gemini with retrieval-augmented generation (RAG) to produce SOC reports mapped to MITRE ATT&CK.
+This project implements an automated endpoint security system for analyzing suspicious Windows and Linux files. It runs samples in Azure sandbox VMs, collects process and network telemetry, then uses Google Gemini with retrieval-augmented generation (RAG) to assess behavior and produce Thai-language reports with MITRE ATT&CK context.
 
-## Results
+## Evaluation results
 
-- 85.33% overall detection accuracy across tested malware families and simulated threats.
-- 95.00% recall for process injection, C2 beaconing, sandbox evasion, and abnormal outbound communication.
-- Tested with APT-style simulations, RATs and stealers, Cobalt Strike-style beacons, IoT/Linux botnets, and evasion-focused samples.
+The evaluation reported in the Computer Engineering thesis (Nakhon Phanom University, academic year 2025) covered 150 files: 75 Windows samples and 75 Linux samples. The set included 100 malware samples and 50 benign files.
+
+| Measure | Result |
+| --- | ---: |
+| Overall accuracy | 85.33% |
+| Precision | 84.82% |
+| Malware recall | 95.00% |
+| Windows malware recall | 96.00% |
+| Linux malware recall | 94.00% |
+| Expert rating for report context | 4.7/5.0 |
+
+Three cybersecurity experts rated the contextual accuracy of the generated reports and Thai recommendations. The sample set included Mirai and Gafgyt Linux malware, a Trojan/stealer, ValleyRAT, Cobalt Strike beacon and sandbox-evasion simulations, and benign system utilities and diagnostic scripts. The APT29 simulation in the reported test set was not detected, so these results should not be read as a guarantee against every threat family or evasion technique.
 
 ## Capabilities
 
-- Runs Windows `.exe` and `.bat` payloads, plus Linux `.elf` and `.sh` payloads, in isolated sandboxes.
-- Automates ingestion, VM provisioning, execution, telemetry collection, reporting, and teardown through n8n.
-- Collects endpoint telemetry with Procmon, Strace, Sysinternals, psutil, and process-tree analysis.
-- Inspects network traffic with TShark and PCAP analysis for C2, beaconing, DGA-like patterns, and suspicious outbound traffic.
-- Uses Gemini and RAG-based context to analyze behavior and map it to MITRE ATT&CK.
-- Classifies activity as clean, infected, or a specific threat family or actor style when the evidence supports it.
-- Produces analyst reports with risk scores, indicators, behavior summaries, and response recommendations.
+- Performs static checks and dynamic analysis on Windows and Linux samples in Azure sandbox VMs.
+- Coordinates file handling, VM control, execution, telemetry collection, analysis, and reporting through n8n workflows.
+- Collects process and system activity with Procmon on Windows and Strace on Linux, and captures network traffic with TShark.
+- Uses Google Gemini and a retrieval-augmented knowledge base to interpret event sequences and map relevant behavior to MITRE ATT&CK.
+- Returns a structured risk assessment with behavior summaries and response recommendations in Thai.
+- Shuts down and restores the sandbox after analysis to prepare it for another run.
 
 ## Workflow
 
 ```text
-Malware Ingestion
-      -> n8n SOAR Orchestrator
-      -> Ephemeral Azure VM Provisioning
-      -> Payload Detonation and Telemetry Monitoring
-      -> Log Extraction and Sandbox Teardown
-      -> Gemini Behavioral Analysis with RAG Context
-      -> Threat Scoring and SOC Report Generation
+File Upload and Static Checks
+      -> n8n Workflow
+      -> Azure Sandbox VM Selection and Startup
+      -> Sample Execution and Process/Network Monitoring
+      -> Log Collection and Filtering
+      -> Gemini Analysis with RAG Context
+      -> Risk Assessment and Thai-Language Report
+      -> Sandbox Shutdown and Restore
 ```
 
 ## Architecture
 
 ![System Architecture](docs/System_Architecture.png)
 
-Orchestration, sandbox execution, telemetry collection, analysis, and reporting run as separate stages. Disposable VMs isolate execution, and telemetry filtering removes noise from monitoring tools.
+The system connects a Streamlit interface and Flask APIs to n8n workflows, Azure VMs, telemetry tools, Gemini, and a vector knowledge base. Windows and Linux samples are analyzed in separate sandbox environments.
 
 ## Previews
 
@@ -54,17 +62,9 @@ Orchestration, sandbox execution, telemetry collection, analysis, and reporting 
 
 ## Security focus
 
-The project supports defensive analysis through isolated malware execution, endpoint and network telemetry, noise filtering, MITRE ATT&CK mapping, and SOC-ready reports. Analysis infrastructure is torn down after execution.
+The system is intended for authorized defensive analysis. Run suspicious files only in an isolated lab that you control. The thesis also reports Azure VM startup delays and less reliable AI summaries when event logs are large or complex.
 
 > For authorized security research, malware-analysis education, and blue-team portfolio use. Never run unknown payloads outside a controlled, isolated lab.
-
-## Tested threat categories
-
-- APT-style behavior simulations, including APT29-inspired scenarios.
-- RAT and stealer behavior, including ValleyRAT-style patterns.
-- Cobalt Strike-style beaconing and command-and-control communication.
-- Linux/IoT botnet behavior, including Mirai and Gafgyt-style variants.
-- Evasion behavior such as sleep patching and environment checks.
 
 ## Tech stack
 
@@ -72,13 +72,13 @@ The project supports defensive analysis through isolated malware execution, endp
 | --- | --- |
 | Backend and API | Python, Flask, Flask-CORS |
 | Frontend and Dashboard | Streamlit, Plotly |
-| AI Analysis | Google Gemini API, RAG-style contextual enrichment |
+| AI Analysis | Google Gemini API, retrieval-augmented generation (RAG) |
 | SOAR and Orchestration | n8n |
-| Sandbox Infrastructure | Microsoft Azure virtual machines, Docker-oriented deployment |
-| Endpoint Telemetry | Procmon, Strace, Sysinternals, psutil |
+| Sandbox Infrastructure | Microsoft Azure virtual machines, Docker |
+| Endpoint Telemetry | Procmon, Strace |
 | Network Telemetry | TShark, PCAP analysis |
 | Data Processing | pandas, NumPy |
-| Storage and Tracking | PostgreSQL, Airtable |
+| Storage and Tracking | Airtable for analysis records, PostgreSQL for n8n |
 
 ## Repository structure
 
@@ -106,36 +106,36 @@ cd ai-edr-threat-detection-system
 ### 2. Create a Python environment
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 ### 3. Configure environment variables
 
-Create a `.env` file for local secrets and service configuration.
+Create `.env` from the template:
 
 ```bash
-GEMINI_API_KEY=your_gemini_api_key
-AZURE_SUBSCRIPTION_ID=your_azure_subscription_id
-AZURE_RESOURCE_GROUP=your_resource_group
-DATABASE_URL=your_database_url
+cp .env.example .env
 ```
 
-Adjust variable names to match your local orchestration and deployment setup.
+Replace each placeholder with values for your services. The Docker Compose setup requires the Gemini key, PostgreSQL credentials, an n8n encryption key, and an ngrok token. Azure control scripts also read the service-principal credentials and subscription settings from this file. Keep `.env` private.
 
 ### 4. Run the dashboard
 
 ```bash
-cd src/frontend
-streamlit run app.py
+make run
 ```
 
-### 5. Run the Azure control API
+This starts the Streamlit interface. The analysis workflow also requires the backend services and Azure sandbox configuration.
+
+### 5. Start the services with Docker Compose
 
 ```bash
-python src/azure/api_server.py
+make docker-up
 ```
+
+The Compose file mounts `src/azure` and the root `.env` into the containers. Azure VM names and resource groups are configured in `src/azure/vm-control-api.sh`; update them for your Azure environment before using VM controls. Use `make docker-down` to stop the services.
 
 ## License
 

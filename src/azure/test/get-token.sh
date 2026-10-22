@@ -1,8 +1,7 @@
 #!/bin/bash
 
-TENANT_ID="d74618be-1bca-49ba-b4dd-eb7604415c8a"
-CLIENT_ID="a251e1ed-ff99-4b6f-b23f-ba466008b1c6"
-CLIENT_SECRET="fCD8Q~sRRXHTaZMJUoaTqZKkjx19n4fz6LSdKdh9"
+source "$(dirname "$0")/../.env"
+
 
 RESPONSE=$(curl -X POST -s "https://login.microsoftonline.com/$TENANT_ID/oauth2/v2.0/token" \
      -H "Content-Type: application/x-www-form-urlencoded" \

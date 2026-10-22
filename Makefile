@@ -1,6 +1,6 @@
 # AI-EDR Threat Detection System Makefile
 
-.PHONY: install setup run clean docker-up docker-down
+.PHONY: help setup run clean docker-up docker-down
 
 # Default action: show help
 help:
